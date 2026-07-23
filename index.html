@@ -64,6 +64,16 @@
           <div class="note-why">※ App Store 外の配布のため、この操作が必要です（macOS の仕様）。中身は署名済みで安全です。</div>
         </div>
 
+        <div class="note">
+          <div class="note-title">それでも開けないとき</div>
+          <p class="note-p">「開けません」「壊れているため開けません」と出る場合は、<b>ターミナル.app</b> を開いて下のコマンドを貼り付け、<b>Enter</b> を押してから、もう一度 Sendy を開いてください。</p>
+          <div class="cmd">
+            <code id="unlock-cmd">xattr -dr com.apple.quarantine /Applications/Sendy.app</code>
+            <button id="copy-cmd" class="copy" type="button">コピー</button>
+          </div>
+          <div class="note-why">※ ダウンロードしたアプリに付く安全確認の目印を外すだけの操作です。中身は変わりません。先に Sendy をアプリケーションへ入れておいてください。</div>
+        </div>
+
         <div class="req">
           <div class="req-row"><span>対応OS</span><b>macOS 12 以降・Apple Silicon（M1〜）</b></div>
           <div class="req-row"><span>データ</span><b>メッセージ本文とログイン情報は端末内にのみ保存</b></div>
@@ -80,6 +90,27 @@
     var a = document.getElementById('download');
     a.href = RELEASE_ASSET;
     a.addEventListener('click', function () { /* direct asset download */ });
+
+    // Copy the Gatekeeper-unlock command for users whose Mac blocks the unsigned-for-notarization app.
+    var copyBtn = document.getElementById('copy-cmd');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        var cmd = document.getElementById('unlock-cmd').textContent;
+        var done = function () {
+          copyBtn.textContent = 'コピーしました';
+          copyBtn.classList.add('done');
+          setTimeout(function () { copyBtn.textContent = 'コピー'; copyBtn.classList.remove('done'); }, 1800);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(cmd).then(done, function () {});
+        } else {
+          var r = document.createRange(); r.selectNodeContents(document.getElementById('unlock-cmd'));
+          var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+          try { document.execCommand('copy'); done(); } catch (e) {}
+          sel.removeAllRanges();
+        }
+      });
+    }
   </script>
 </body>
 </html>

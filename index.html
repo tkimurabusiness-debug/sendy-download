@@ -259,9 +259,42 @@
   </footer>
 
   <script>
-    // The DMG lives as a GitHub Release asset (Pages can't host >100MB).
-    document.getElementById('download-btn').href =
-      'https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-0.1.0-arm64.dmg';
+    // アプリ本体は GitHub のリリースに置いてある (Pages は 100MB を超えるファイルを置けない)。
+    //
+    // 2026-07-26 の事故と対策: ここにファイル名を「Sendy-0.1.0-arm64.dmg」と直書きしていたため、
+    // v0.2.0 を公開した瞬間にダウンロードが 404 になった (リリースごとにファイル名が変わるのに、
+    // ページ側は古い名前を指し続けていた)。版番号を二度と直書きせず、公開中の最新リリースに
+    // 実際に添付されている .dmg を GitHub に問い合わせて使う。
+    (function () {
+      // ダウンロードボタンはページ上部と下部の2か所にある。getElementById は最初の1つしか
+      // 返さないため、以前は下のボタンが href="#" のままで押しても何も起きなかった。全部に入れる。
+      var btns = document.querySelectorAll('#download-btn');
+      var setHref = function (url) {
+        Array.prototype.forEach.call(btns, function (b) { b.href = url; });
+      };
+      var API = 'https://api.github.com/repos/tkimurabusiness-debug/sendy-download/releases/latest';
+      // 問い合わせが失敗しても押せるように、まず最新リリースのページを入れておく。
+      setHref('https://github.com/tkimurabusiness-debug/sendy-download/releases/latest');
+
+      fetch(API, { headers: { Accept: 'application/vnd.github+json' } })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+        .then(function (rel) {
+          var dmg = (rel.assets || []).filter(function (a) { return /\.dmg$/.test(a.name); })[0];
+          if (!dmg) return;
+          setHref(dmg.browser_download_url);
+          // 大きさと版番号もリリースの実物に合わせる (手で書き換える手間と間違いをなくす)。
+          // 1MB = 100万バイトで計算する。macOS の Finder と Safari のダウンロード表示が
+          // この数え方なので、利用者が実際に目にする数字と一致させる。
+          var mb = Math.round(dmg.size / 1e6);
+          Array.prototype.forEach.call(document.querySelectorAll('#dl-size'), function (el) {
+            el.textContent = '約 ' + mb + ' MB';
+          });
+          Array.prototype.forEach.call(document.querySelectorAll('#dl-ver'), function (el) {
+            el.textContent = rel.tag_name || '';
+          });
+        })
+        .catch(function () { /* 押せば最新リリースのページには行ける */ });
+    })();
 
     // Copy the Gatekeeper-unlock command.
     var copyBtn = document.getElementById('copy-cmd');

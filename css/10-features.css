@@ -1,0 +1,133 @@
+/* Sendy LP — 強みの節 (S1〜S5)。竹蔵採用 案 A-2「5つまとめて1本のロック」(2026-07-25)。
+   下敷き (実在コードの移植。ゼロから書いていない):
+   - ロック(pin)の構成 = Codrops folding-cardboard-box (MIT) の
+     gsap.timeline({ scrollTrigger: { scrub, pin } })。掛ける相手を長い1本のステージにしただけ。
+   - 映像の左右スライドと文章の入れ替えは GSAP の x / autoAlpha トゥイーンのみ (js/features.js)。
+   トークンの正本は css/00-base.css の :root。このファイルでは :root を再定義しない
+   (再定義が「--ink 衝突 → 背景が白く化ける」事故の原因だったため)。
+   文字組は旧 .feature-text (A-1) と同値。 */
+
+.fx2 {
+  /* 100vh (画面1枚) + 強み5つ × 150vh */
+  height: 850vh;
+  background: var(--ink);
+}
+
+.fx2-pin {
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.fx2-grid {
+  position: relative;
+  height: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 24px;
+  /* 映像の幅。JavaScript でも実測して入れ直すが、その計算を待たずに正しい値になるよう
+     ここでも同じ式を書いておく。
+     **2026-07-26 竹蔵の指示で縦長 9:16 から横長 16:10 に変えた。**
+     理由: Sendy は横長の Mac アプリなので、縦枠に入れると画面が小さくなって文字が読めない
+     (実測: 縦枠 435px 幅に Mac の3列の画面を入れると、文字の高さが 4px 相当になる)。
+     幅は画面の横幅の 46% までに抑える。46% なら、残り 54% に文章が入って必ず横に並ぶ。 */
+  /* **単位は「枠 (.fx2-grid) に対する割合」にする。** 画面の幅 (vw) を使うと、
+     枠の最大幅 1120px より画面が広い時にずれる (2026-07-26 実測: 46vw = 662px は
+     枠 1120px の 59% にあたり、文章のために空けた 50% を食い破って 126px 重なった)。
+     映像 46% + 文章 50% = 96% なので必ず横に並ぶ。 */
+  --fx2-mw: 46%;
+  --fx2-gap: 56px;
+}
+
+.fx2-media {
+  position: absolute;
+  left: 24px;
+  /* 幅は枠に対する割合。高さは aspect-ratio で決める
+     (割合で書いた幅を calc の height に渡すと、枠の「高さ」に対する割合と解釈されて壊れる)。 */
+  width: var(--fx2-mw);
+  aspect-ratio: 16 / 10;
+  max-height: 72vh;
+  top: 50%;
+  translate: 0 -50%;
+  border-radius: var(--radius-media);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--ink-deep);
+  will-change: transform;
+}
+.fx2-media canvas { display: block; width: 100%; height: 100%; }
+
+/* 文章。data-side は「文章が置かれる側」。GSAP は中の .fx2-text-inner だけを動かす。 */
+.fx2-text {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+}
+/* **文章は必ず「映像が居ない側」の半分だけを使う。**
+   以前は「映像は常に左端に居る」前提で余白を計算していたが、実際には映像が
+   1つおきに右端へ移動する (js/features.js の mediaX)。そのため映像が右に来た回で
+   文章と重なっていた (竹蔵 2026-07-25「動画のところで食い込んでたり」)。
+   映像の幅は横幅の34%までなので、画面を半分で割れば必ず衝突しない。 */
+.fx2-text[data-side="right"] { left: 50%; right: 24px; }
+.fx2-text[data-side="left"]  { left: 24px; right: 50%; }
+.fx2-text-inner { opacity: 0; visibility: hidden; }
+
+/* 文字組は旧 10-features.css の .feature-text h2 / p と同値 */
+.fx2-text h2 {
+  margin: 0 0 18px;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: clamp(48px, 3.6vw, 68px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  word-break: keep-all;   /* 日本語見出しの分断防止 (文節 <wbr> と併用) */
+  text-wrap: balance;
+}
+.fx2-text p {
+  margin: 0;
+  max-width: 46ch;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.9;
+  color: var(--fg-dim);
+}
+
+/* 狭い画面: 映像を中央上に固定し、文章は下に重ねる (左右の行き来は無し) */
+@media (max-width: 900px) {
+  /* 狭い画面は「映像が上・文章が下」の縦積み。**縦の取り分を必ず分ける** —
+     以前は映像が高さの56%を占めたまま文章を下6%から置いていたため、間が足りずに
+     文字が映像へ食い込んでいた (竹蔵 2026-07-25「まだこの辺治ってねえ」)。
+     映像は上から3vh・高さ44vh、文章は上から50vh 以降。重なりようがない配分にする。 */
+  .fx2-media {
+    /* 狭い画面は横幅いっぱいに置く (横長なので縦は自然に低くなる) */
+    left: 20px !important; right: 20px; translate: none;
+    top: 6vh; width: auto; height: calc((100vw - 40px) * 10 / 16); max-height: 40vh;
+  }
+  .fx2-text[data-side="right"], .fx2-text[data-side="left"] {
+    left: 20px; right: 20px; top: 50vh; bottom: auto; translate: none;
+  }
+  .fx2-text h2 { font-size: clamp(28px, 7vw, 40px); }
+  .fx2-text p { font-size: 15px; line-height: 1.8; }
+}
+
+/* GSAP が無い環境の置き土産。
+   注意: .fx2-text は通常 absolute 重ね置きのため、そのままだと5組の文章が重なって読めない
+   (対向レビュー🔴 2026-07-25)。静的表示では通常フローに戻して縦に並べる。 */
+.fx2-static .fx2 { height: auto; }
+.fx2-static .fx2-pin { height: auto; padding: 88px 0; overflow: visible; }
+.fx2-static .fx2-grid { height: auto; }
+.fx2-static .fx2-media { position: static; margin: 0 auto 48px; translate: none; }
+.fx2-static .fx2-text { position: static; translate: none; margin: 0 0 64px; }
+.fx2-static .fx2-text:last-child { margin-bottom: 0; }
+.fx2-static .fx2-text-inner { opacity: 1; visibility: visible; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fx2 { height: auto; }
+  .fx2-pin { height: auto; padding: 88px 0; overflow: visible; }
+  .fx2-grid { height: auto; }
+  .fx2-media { position: static !important; margin: 0 auto 48px; translate: none !important; }
+  .fx2-text { position: static !important; translate: none !important; margin: 0 0 64px; }
+  .fx2-text:last-child { margin-bottom: 0; }
+  .fx2-text-inner { opacity: 1 !important; visibility: visible !important; }
+}

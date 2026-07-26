@@ -1,0 +1,201 @@
+/* Sendy LP — フッター (Leonardo.ai を下敷き・竹蔵指定 / design.md §5)
+   取得物 (実CSS・実HTML): /tmp/sendy-refs/leonardo/
+     - Wayback Machine 経由 https://web.archive.org/web/20260719100119/https://leonardo.ai/
+     - CSS 9本 (計 259,617 bytes)。直アクセスは Cloudflare の 403 のため回避。
+   ここへ移植した実値 (出典: 7ac5b1db0e41c965.css):
+     - --tracking-tight: -.02em                       → 巨大文字と列見出しの letter-spacing
+     - --font-weight-extrabold: 800                   → 巨大文字の太さ (Bricolage の上限も800)
+     - --text-220--line-height: .9 / s-text-fill の leading-[0.85] (index.html 実マークアップ)
+       → 巨大文字の line-height 0.85
+     - .whitespace-nowrap { white-space: nowrap } / .uppercase { text-transform: uppercase }
+   実HTML から移植した構造: s-text-fill の入れ子 span (外=幅合わせ、内=nowrap の1行)。
+   巨大文字の大きさだけは design.md §5 の決定どおり clamp(64px, 21vw, 320px) で近似する
+   (Leonardo は JS で文字幅を実測して font-size をインライン注入する方式 = R3 調査④。
+    SENDY は和文が混ざらない5文字固定なので JS を足さない)。
+   色・書体のトークンの正本は css/00-base.css の :root。ここでは :root を再定義しない。 */
+
+.site-footer {
+  background: var(--ink);
+  border-top: 1px solid var(--line);
+  padding: 88px 0 0;
+}
+
+/* ---------- 1段目: 左=アイコン+開発元 / 右=3列リンク (design.md §5 1段目) ---------- */
+
+.footer-top {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 48px 64px;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.footer-brand img {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px var(--line);
+}
+.footer-brand-lines { display: flex; flex-direction: column; gap: 2px; }
+.footer-brand-name {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.005em;
+  color: var(--fg);
+}
+.footer-brand-co {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--fg-faint);
+}
+
+.footer-cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, auto));
+  gap: 40px 56px;
+}
+.footer-col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.footer-col-title {
+  font-size: 11.5px;
+  font-weight: 500;
+  /* Leonardo の列見出しの作法: uppercase (実CSS .uppercase) + tracking (-.02em の逆向きに
+     小さく開ける)。和文ラベルのため大文字化は効かず、字間だけ借りる。 */
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-faint);
+  margin-bottom: 2px;
+}
+.footer-col a {
+  font-size: 13.5px;
+  font-weight: 300;
+  color: var(--fg-dim);
+  transition: color 160ms ease;
+  white-space: nowrap;   /* Leonardo 実CSS .whitespace-nowrap の移植 */
+}
+.footer-col a:hover { color: var(--fg); }
+
+/* ---------- ダウンロード (竹蔵採用 C-3: 独立した段をやめ、1段目の4列目に置く) ---------- */
+
+.footer-dl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 15px 30px;
+  border-radius: 14px;              /* design.md §2: ボタンの角丸は14px */
+  background: var(--acc);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  font-weight: 600;
+  box-shadow: 0 10px 28px rgba(59, 109, 255, 0.32);
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+}
+.footer-dl-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 14px 34px rgba(139, 92, 246, 0.4);
+}
+.footer-dl-btn:active { transform: translateY(0) scale(0.98); }
+.footer-download-meta { font-size: 12px; font-weight: 300; color: var(--fg-faint); }
+
+/* C-3: 列の中に収まる小さめのボタン (案出し opt/footer-3.css の移植) */
+.footer-cols { grid-template-columns: repeat(4, minmax(120px, auto)); }
+.footer-dl-btn--col {
+  padding: 11px 18px;
+  font-size: 13px;
+  border-radius: 12px;
+  align-self: flex-start;
+}
+.footer-col .footer-download-meta { font-size: 11.5px; }
+/* opt/footer-3.css どおり: 900px 以下は2列 (768px で 4列がはみ出すため) */
+@media (max-width: 900px) {
+  .footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* 2列になると「ダウンロード」列の幅が狭くなり、幅375では列の中でボタンの文字
+     「Sendy をダウンロード」が「ダウ」「ンロード」で折り返して見切れて見えた
+     (竹蔵の写真で指摘された箇所)。ダウンロード列だけ1段まるごと使う。 */
+  .footer-col:nth-child(4) { grid-column: 1 / -1; }
+  .footer-dl-btn--col { white-space: nowrap; }
+}
+
+/* ---------- 3段目: 巨大ワードマーク (design.md §5 3段目 / Leonardo s-text-fill 移植) ---------- */
+
+.wordmark-wrap {
+  width: 100%;
+  overflow: hidden;          /* 迫り上がりの切り抜き窓 */
+  margin-top: 56px;          /* C-3: ダウンロード段が無くなったぶん詰める */
+}
+.wordmark {
+  margin: 0;
+  padding: 0;
+  display: block;
+  text-align: center;
+}
+/* Leonardo 実マークアップの入れ子: 外の span が幅、内の span が nowrap の1行。
+   <span class="wordmark-fill"><span class="wordmark-line"><span>SENDY</span></span></span> */
+.wordmark-fill { display: block; width: 100%; }
+.wordmark-line {
+  display: inline-flex;                 /* Leonardo: relative inline-flex whitespace-nowrap */
+  white-space: nowrap;
+  font-family: var(--font-head);
+  font-weight: 800;                     /* Leonardo --font-weight-extrabold: 800 */
+  /* design.md §5 の当初値 21vw では実測幅が画面の60% (1440px幅で870px) しか無かった。
+     §5 自身の指示「3幅で見て余りが出ないか確認する」に従い実測で補正:
+     幅/フォントサイズ比 = 870/302 = 2.88 → 96vw ÷ 2.88 ≒ 33.4vw。上限も比例して 500px。 */
+  font-size: clamp(64px, 33.4vw, 500px);
+  line-height: 0.85;                    /* Leonardo leading-[0.85] */
+  letter-spacing: -0.02em;              /* Leonardo --tracking-tight: -.02em */
+  text-transform: uppercase;            /* Leonardo .uppercase */
+  background: linear-gradient(100deg, var(--accent-from) 12%, var(--accent-to) 88%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transform: translateY(100%);
+  transition: transform 0.8s var(--ease);   /* design.md §5: 0.8s・1回だけ */
+  will-change: transform;
+}
+.wordmark.in .wordmark-line { transform: translateY(0); }
+
+/* ---------- 4段目: 著作権 + 法務リンク (design.md §5 4段目) ---------- */
+
+.footer-bottom {
+  max-width: var(--maxw);
+  margin: 44px auto 0;
+  padding: 22px 24px 36px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.footer-copy { font-size: 12px; font-weight: 300; color: var(--fg-faint); }
+.footer-legal { display: flex; gap: 20px; font-size: 12.5px; color: var(--fg-faint); }
+.footer-legal a:hover { color: var(--fg); }
+
+/* ---------- レスポンシブ ---------- */
+
+@media (max-width: 720px) {
+  .site-footer { padding-top: 64px; }
+  .footer-top { flex-direction: column; gap: 40px; }
+  .footer-cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 24px;
+    width: 100%;
+  }
+  .footer-col a { white-space: normal; }
+  .wordmark-wrap { margin-top: 48px; }
+  .footer-bottom { justify-content: flex-start; padding-bottom: 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wordmark-line { transform: none !important; transition: none !important; }
+}

@@ -1,35 +1,26 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Private share link: keep out of search engines (founder 2026-07-22: noindex). -->
-  <meta name="robots" content="noindex, nofollow" />
-  <meta name="googlebot" content="noindex, nofollow" />
-  <title>Sendy — 連絡を1か所に。返信はAIと一緒に片づける</title>
-  <meta property="og:title" content="Sendy" />
-  <meta property="og:description" content="Messenger・LINE・LinkedIn・Gmailを1つの受信箱に。読んでも既読が付かず、返信はあなたの言い回しで下書きされる。" />
-  <meta property="og:image" content="assets/shot-inbox.png" />
-  <link rel="icon" href="assets/icon.png" />
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Sendy — 連絡を1か所に</title>
+<link rel="icon" href="assets/icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Onest:wght@100..900&family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/00-base.css" />
+<link rel="stylesheet" href="css/10-features.css" />
+<link rel="stylesheet" href="css/20-services.css" />
+<link rel="stylesheet" href="css/30-footer.css" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 </head>
 <body>
-  <header class="lg-header" id="lgHeader">
-    <div class="lg-inner">
-      <a class="lg-brand" href="#top">
-        <img src="assets/icon.png" alt="" />
-        <span>Sendy</span>
-      </a>
-      <nav class="lg-nav">
-        <a href="#features">できること</a>
-        <a href="#providers">対応サービス</a>
-        <a href="#security">安全性</a>
-      </nav>
-      <a class="lg-cta" href="#download">ダウンロード</a>
-    </div>
-  </header>
-
-<main class="split">
+  <!-- ============================================================
+       S0. ヒーロー (左右分割・承認済みの土台。触らない)
+  ============================================================ -->
+  <main class="split">
     <!-- LEFT: brand / product hero (matches the app's login design) -->
     <section class="hero">
       <div class="hero-inner">
@@ -40,7 +31,9 @@
 
         <div class="hero-body">
           <img src="assets/hero.png" alt="Sendy のプレビュー" class="hero-shot" />
-          <h1>連絡を1か所に。<br />返信はAIと一緒に片づける</h1>
+          <!-- 見出しに句読点と <br> を使わない (design.md §1 / 竹蔵の厳命)。
+               読点が要る長さなので文を2つに分け、行はブロック要素で分ける。 -->
+          <h1><span class="h1-line">連絡を1か所に</span><span class="h1-line">返信は<wbr>AIと<wbr>一緒に<wbr>片づける</span></h1>
           <p class="lead">Messenger・LINE・LinkedIn・Gmail を1つの受信箱に。読んでも相手に既読は付かず、返信はあなたの言い回しを学んだ下書きを承認するだけ。</p>
           <ul class="features">
             <li>
@@ -59,20 +52,17 @@
     </section>
 
     <!-- RIGHT: download panel -->
-    <section class="download">
+    <section class="download" id="download">
       <div class="dl-inner">
         <h2>ダウンロード</h2>
         <p class="dl-sub">macOS 版（Apple Silicon）</p>
 
-        <a id="download-btn" class="dl-btn" href="#" rel="noopener">
+        <a id="download-btn" class="dl-btn" href="https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-0.1.0-arm64.dmg" rel="noopener">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg>
           <span>Sendy をダウンロード</span>
         </a>
         <div class="dl-meta"><span id="dl-size">約 172 MB</span> · <span id="dl-ver">v0.1.0</span> · .dmg</div>
 
-        
-
-        
         <div class="note">
           <div class="note-title">Messenger の過去のやり取りが出てこないとき</div>
           <p class="note-p">Messenger の暗号化されたチャットは、<b>会話ごとに1回だけ取り込み操作</b>が必要です。画面上部の <b>相手の名前</b> を押してチャット設定を開き、<b>「過去の履歴を復元」</b> を押してください。</p>
@@ -91,252 +81,185 @@
     </section>
   </main>
 
-  <main id="top">
-<!-- ============ FEATURES ============ -->
-    <section id="features" class="section">
-      <div class="section-head reveal">
-        <h2>Sendy が得意なこと</h2>
-        <p>「返信が遅れる」を、仕組みで無くすための道具です。</p>
+  <!-- ============================================================
+       S6. ロゴが集まる節 (竹蔵指示 2026-07-25: ヒーローのすぐ次に置く)
+       流れ: アイコンが画面いっぱいに散らばっている → 1個ずつ Sendy のアイコンへ
+             吸い込まれる → 取り込むたびに Sendy のアイコンが跳ねる
+  ============================================================ -->
+  <section class="svc-stage" id="svcStage" aria-label="対応サービスのアイコンが Sendy にまとまる演出">
+    <div class="svc-stage__pin">
+      <!-- 竹蔵 2026-07-26「見出しとして全てのアプリを1つにみたいな感じで。文字色はアクセントカラーで」。
+           アイコンが集まる演出の上に置く。見出しに「、」「。」は使わない (竹蔵のルール)。 -->
+      <h2 class="svc-stage__title">すべてのアプリを ひとつに</h2>
+      <!-- 背景でずっと動き続ける層 (Canvas UI の grid・バニラ版を取得してビルドしたもの)。
+           tint は [0.388,0.394,0.982] の数値で渡す (文字列を渡すと緑に化ける)。 -->
+      <div class="svc-bg" aria-hidden="true">
+        <canvas class="svc-bg__src"></canvas>
+        <div class="svc-bg__content"></div>
+        <canvas class="svc-bg__out"></canvas>
       </div>
 
-      <div class="cards">
-        <article class="card reveal">
-          <div class="ico" aria-hidden><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
-          <h3>複数のメッセージアプリを1つに</h3>
-          <p>Messenger・LINE・LinkedIn・Gmail が同じ一覧に並びます。アプリを行き来せず、上から順に片づけるだけ。</p>
-        </article>
-
-        <article class="card reveal accent">
-          <div class="ico" aria-hidden><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path d="M3 3l18 18"/></svg></div>
-          <h3>読んでも既読が付かない</h3>
-          <p>開いただけでは相手に既読を送りません。<b>返信を送った時にはじめて既読が付く</b>ので、「読んだのに返せていない」気まずさが消えます。設定で切り替えも可能。</p>
-        </article>
-
-        <article class="card reveal">
-          <div class="ico" aria-hidden><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.2 5.3L20 10l-5.8 1.7L12 17l-2.2-5.3L4 10l5.8-1.7L12 3Z"/></svg></div>
-          <h3>あなたの言い回しで下書き</h3>
-          <p>過去のやり取りから相手ごとの文脈と、あなたの文体を学びます。ミラーリング・簡潔・丁寧・日程調整から狙いを選び、承認して送るだけ。</p>
-        </article>
-
-        <article class="card reveal">
-          <div class="ico" aria-hidden><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
-          <h3>あとで送る・思い出す</h3>
-          <p>深夜に書いて朝に届ける予約送信と、返し忘れを防ぐリマインダー。予約は一覧からその場で時刻も文面も直せます。</p>
-        </article>
-
-        <article class="card reveal">
-          <div class="ico" aria-hidden><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4v6c0 4-3 6.5-7 8-4-1.5-7-4-7-8V7l7-4Z"/><path d="m9 12 2 2 4-4"/></svg></div>
-          <h3>作り込まれた操作感</h3>
-          <p>⌘K で会話へ一足飛び、⌘数字でサービス切替。macOS らしい半透明の質感と、目が疲れない黒を基調にしています。</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- ============ PROVIDERS ============ -->
-    <section id="providers" class="section alt">
-      <div class="section-head reveal">
-        <h2>対応サービス</h2>
-        <p>動作確認が取れたものから順に開放しています。</p>
+      <!-- 受け側: Sendy のアイコン。1つ取り込むたびに跳ねる -->
+      <div class="svc-hubwrap">
+        <span class="svc-ring" id="svcRing" aria-hidden="true"></span>
+        <img class="svc-hub" id="svcHub" src="assets/sendy.png" alt="Sendy" width="132" height="132" />
       </div>
 
-      <div class="prov-group reveal">
-        <div class="prov-label ok"><span class="dot"></span>いま使えます</div>
-        <div class="prov-grid">
-          <div class="prov"><img src="assets/providers/messenger.png" alt="" /><span>Messenger</span></div>
-          <div class="prov"><img src="assets/providers/line.png" alt="" /><span>LINE</span></div>
-          <div class="prov"><img src="assets/providers/linkedin.png" alt="" /><span>LinkedIn</span></div>
-          <div class="prov"><img src="assets/providers/gmail.png" alt="" /><span>Gmail</span></div>
+      <div class="svc-scatter" id="svcScatter">
+        <!-- 置き場所は「上から28%より下」に揃えている。竹蔵 2026-07-26 の見出しを上に置いたため、
+             以前の 8〜12% だと見出しの文字とアイコンが重なって読めなかった。 -->
+        <img class="svc-icon" style="--x:10%;--y:30%;--r:-8deg" src="assets/messenger.png" alt="Messenger" />
+        <img class="svc-icon" style="--x:90%;--y:30%;--r:10deg" src="assets/line.png" alt="LINE" />
+        <img class="svc-icon" style="--x:12%;--y:72%;--r:6deg" src="assets/linkedin.png" alt="LinkedIn" />
+        <img class="svc-icon" style="--x:34%;--y:80%;--r:-12deg" src="assets/gmail.png" alt="Gmail" />
+        <img class="svc-icon" style="--x:5%;--y:52%;--r:14deg" src="assets/slack.png" alt="Slack" />
+        <img class="svc-icon" style="--x:95%;--y:52%;--r:-6deg" src="assets/discord.png" alt="Discord" />
+        <img class="svc-icon" style="--x:28%;--y:33%;--r:4deg" src="assets/instagram.png" alt="Instagram" />
+        <img class="svc-icon" style="--x:72%;--y:33%;--r:-10deg" src="assets/chatwork.png" alt="Chatwork" />
+        <img class="svc-icon" style="--x:66%;--y:80%;--r:8deg" src="assets/icloud-mail.png" alt="iCloud メール" />
+        <img class="svc-icon" style="--x:90%;--y:72%;--r:-4deg" src="assets/outlook.png" alt="Outlook" />
+      </div>
+    </div>
+  </section>
+
+  <!-- S6-b. 対応サービスの一覧 -->
+  <section class="svc-list" id="providers">
+    <div class="section-head reveal">
+      <h2>対応サービス</h2>
+      <p>動作確認が取れたものから順に開放しています。</p>
+    </div>
+
+    <div class="prov-group reveal">
+      <div class="prov-label ok"><span class="dot"></span>動作確認済み</div>
+      <div class="prov-grid prov-grid--featured">
+        <div class="prov prov--featured"><span class="prov-frame"><img src="assets/messenger.png" alt="" /></span><span class="prov-name">Messenger</span></div>
+        <div class="prov prov--featured"><span class="prov-frame"><img src="assets/line.png" alt="" /></span><span class="prov-name">LINE</span></div>
+        <div class="prov prov--featured"><span class="prov-frame"><img src="assets/linkedin.png" alt="" /></span><span class="prov-name">LinkedIn</span></div>
+        <div class="prov prov--featured"><span class="prov-frame"><img src="assets/gmail.png" alt="" /></span><span class="prov-name">Gmail</span></div>
+      </div>
+    </div>
+
+    <div class="prov-group reveal">
+      <div class="prov-label soon">近日対応</div>
+      <div class="prov-tags">
+        <span class="prov-tag"><img src="assets/slack.png" alt="" />Slack</span>
+        <span class="prov-tag"><img src="assets/discord.png" alt="" />Discord</span>
+        <span class="prov-tag"><img src="assets/instagram.png" alt="" />Instagram</span>
+        <span class="prov-tag"><img src="assets/chatwork.png" alt="" />Chatwork</span>
+        <span class="prov-tag"><img src="assets/icloud-mail.png" alt="" />iCloud メール</span>
+        <span class="prov-tag"><img src="assets/outlook.png" alt="" />Outlook</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       S1〜S5. 強みの節 (竹蔵採用 A-2: 5つまとめて1本のロック)
+       節全体 850vh。中の .fx2-pin (100vh) を GSAP ScrollTrigger が pin し、
+       スクロールに合わせて縦動画 (連番画像) が左右に滑り、文章だけが入れ替わる。
+  ============================================================ -->
+  <div class="fx2" id="features">
+    <div class="fx2-pin">
+      <div class="fx2-grid">
+        <div class="fx2-media">
+          <canvas width="1600" height="1000" aria-hidden="true"></canvas>
         </div>
-      </div>
-
-      <div class="prov-group reveal">
-        <div class="prov-label soon">近日対応</div>
-        <div class="prov-grid soon">
-          <div class="prov"><img src="assets/providers/outlook.png" alt="" /><span>Outlook</span></div>
-          <div class="prov"><img src="assets/providers/icloud-mail.png" alt="" /><span>iCloud メール</span></div>
-          <div class="prov"><img src="assets/providers/instagram.png" alt="" /><span>Instagram</span></div>
-          <div class="prov"><img src="assets/providers/slack.png" alt="" /><span>Slack</span></div>
-          <div class="prov"><img src="assets/providers/chatwork.png" alt="" /><span>Chatwork</span></div>
-          <div class="prov"><img src="assets/providers/whatsapp.png" alt="" /><span>WhatsApp</span></div>
-          <div class="prov"><img src="assets/providers/telegram.png" alt="" /><span>Telegram</span></div>
-          <div class="prov"><img src="assets/providers/discord.png" alt="" /><span>Discord</span></div>
-          <div class="prov"><img src="assets/providers/signal.png" alt="" /><span>Signal</span></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ SECURITY ============ -->
-    <section id="security" class="section">
-      <div class="section-head reveal">
-        <h2>あなたのデータは、あなたの Mac の中だけ</h2>
-        <p>開発元（Stock Value）は、あなたのログイン情報もメッセージ本文も受け取れません。受け取る仕組み自体がありません。</p>
-      </div>
-
-      <div class="privacy-grid">
-        <div class="pcard reveal">
-          <h3>ログイン情報は端末内で暗号化</h3>
-          <p>各サービスのログイン情報は、macOS の安全な保管領域（Keychain / safeStorage）で暗号化し、<b>この Mac の中だけ</b>に保存します。外部へ送る通信経路を実装していません。</p>
-        </div>
-        <div class="pcard reveal">
-          <h3>メッセージ本文も端末内だけ</h3>
-          <p>受信したメッセージ・添付・連絡先は、あなたの Mac のアプリ用フォルダに保存されます。開発元のサーバーへのアップロードはありません。</p>
-        </div>
-        <div class="pcard reveal">
-          <h3>AI に渡すのは、あなたが押した時だけ</h3>
-          <p>返信案を作る操作をした時に限り、その会話の内容が AI（Google Gemini）へ送られます。モデルの学習には使われない条件で呼び出しています。AI 機能を使わなければ何も送られません。</p>
-        </div>
-        <div class="pcard reveal">
-          <h3>不具合の記録にも本文は入れない</h3>
-          <p>アプリ内の記録は「いつ・どこで失敗したか」だけです。会話の中身やログイン情報は含めません。共有するかどうかもあなたが決めます。</p>
-        </div>
-      </div>
-
-      <div class="legal-links reveal">
-        <a class="btn ghost" href="privacy.html">プライバシーポリシー</a>
-        <a class="btn ghost" href="terms.html">利用規約</a>
-      </div>
-    </section>
-
-    <!-- ============ DOWNLOAD ============ -->
-    <section id="download" class="section alt">
-      <div class="section-head reveal">
-        <h2>ダウンロード</h2>
-        <p>macOS 版（Apple Silicon）</p>
-      </div>
-
-      <div class="dl-wrap">
-        <a id="download-btn" class="btn primary big" href="#" rel="noopener">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg>
-          <span>Sendy をダウンロード</span>
-        </a>
-        <div class="dl-meta"><span id="dl-size">約 172 MB</span> · <span id="dl-ver">v0.1.0</span> · .dmg</div>
-
-        <div class="note">
-          <div class="note-title">インストール</div>
-          <ol>
-            <li>ダウンロードした <b>Sendy.dmg</b> を開きます。</li>
-            <li><b>Sendy</b> をアプリケーションフォルダへドラッグします。</li>
-            <li>アプリケーションから <b>Sendy</b> を開きます。以上です。</li>
-          </ol>
-          <div class="note-why">※ Apple の開発元登録と公証を受けたアプリです。ターミナルでの操作は要りません。</div>
-        </div>
-        </div>
-
-        <div class="note">
-          <div class="note-title">Messenger の過去のやり取りが出てこないとき</div>
-          <p class="note-p">
-            Messenger の暗号化されたチャットは、<b>会話ごとに1回だけ取り込み操作</b>が必要です。
-            画面上部の <b>相手の名前</b> を押してチャット設定を開き、<b>「過去の履歴を復元」</b> を押してください。
-          </p>
-          <figure class="shotfig">
-            <img src="assets/shot-restore.png" alt="相手の名前を押すと右側にチャット設定が開き、「過去の履歴を復元」ボタンが表示される" />
-            <figcaption>① 相手の名前を押す → ② 右側の「過去の履歴を復元」を押す</figcaption>
-          </figure>
-          <div class="note-why">
-            ※ 途中で Messenger の暗証番号（PIN）を求められたら入力してください。取り込みは<b>あなたの Mac の中だけ</b>で行われます。<br />
-            ※ 何度でも実行できます。押すたびに最新の内容で取り直します。
+        <div class="fx2-text" data-side="right">
+          <div class="fx2-text-inner">
+            <h2>1つの<wbr>受信箱に<wbr>まとまる</h2>
+            <p>Messenger・LINE・LinkedIn・Gmail をひとつの画面で読み書きできます。アプリを行き来する必要がなくなります。</p>
           </div>
         </div>
-
-        <div class="req">
-          <div class="req-row"><span>対応OS</span><b>macOS 12 以降・Apple Silicon（M1〜）</b></div>
-          <div class="req-row"><span>データ</span><b>メッセージ本文とログイン情報は端末内にのみ保存</b></div>
-          <div class="req-row"><span>費用</span><b>ベータ期間中は無料</b></div>
+        <div class="fx2-text" data-side="left">
+          <div class="fx2-text-inner">
+            <h2>読んでも<wbr>既読が<wbr>付かない</h2>
+            <p>開いて読むだけでは相手に既読が伝わりません。返信を送った時にだけ既読が付きます。</p>
+          </div>
+        </div>
+        <div class="fx2-text" data-side="right">
+          <div class="fx2-text-inner">
+            <h2>あなたの<wbr>言い回しで<wbr>下書きが出る</h2>
+            <p>過去のやり取りから文体を学び、返信の下書きを用意します。選んで直して送るだけです。</p>
+          </div>
+        </div>
+        <div class="fx2-text" data-side="left">
+          <div class="fx2-text-inner">
+            <h2>相手のことを<wbr>覚えている</h2>
+            <p>誰と何を話したかを記憶し、返信の材料として差し出します。毎回さかのぼる必要がありません。</p>
+          </div>
+        </div>
+        <div class="fx2-text" data-side="right">
+          <div class="fx2-text-inner">
+            <h2>送る時間を<wbr>決められる</h2>
+            <p>深夜に書いても、届く時間は指定できます。相手の時間を邪魔しません。</p>
+          </div>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </div>
 
-  <footer class="foot">
-    <div class="foot-inner">
-      <div class="foot-brand"><img src="assets/icon.png" alt="" /><span>Sendy</span></div>
-      <div class="foot-links">
+  <!-- ============================================================
+       S10. フッター (Leonardo.ai を下敷き・design.md §5)
+  ============================================================ -->
+  <footer class="site-footer" id="footer">
+    <!-- 1段目: 左=アイコン+開発元 / 右=3列リンク -->
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="assets/icon.png" alt="" />
+        <div class="footer-brand-lines">
+          <span class="footer-brand-name">Sendy</span>
+          <span class="footer-brand-co">開発元 株式会社 Stock Value</span>
+        </div>
+      </div>
+
+      <nav class="footer-cols" aria-label="フッターのリンク">
+        <div class="footer-col">
+          <div class="footer-col-title">製品</div>
+          <a href="#features">できること</a>
+          <a href="#providers">対応サービス</a>
+          <a href="#download">ダウンロード</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">安全性</div>
+          <a href="privacy.html">プライバシーポリシー</a>
+          <a href="terms.html">利用規約</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">問い合わせ</div>
+          <a href="mailto:info@stockvalue.co.jp">info@stockvalue.co.jp</a>
+        </div>
+        <!-- 竹蔵採用 C-3 (2026-07-25): ダウンロードは独立した段をやめ、1段目の4列目に入れる -->
+        <div class="footer-col">
+          <div class="footer-col-title">ダウンロード</div>
+          <a class="footer-dl-btn footer-dl-btn--col" href="https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-0.1.0-arm64.dmg" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg>
+            <span>Sendy をダウンロード</span>
+          </a>
+          <span class="footer-download-meta">macOS 12 以降 · Apple Silicon（M1〜）</span>
+        </div>
+      </nav>
+    </div>
+
+    <!-- 3段目: 巨大ワードマーク (画面幅いっぱい・スクロールで迫り上がる・1回だけ)。
+         入れ子の span 構造は Leonardo.ai の s-text-fill の実マークアップを移植。 -->
+    <div class="wordmark-wrap">
+      <h2 class="wordmark" id="wordmark" aria-label="SENDY">
+        <span class="wordmark-fill"><span class="wordmark-line"><span>SENDY</span></span></span>
+      </h2>
+    </div>
+
+    <!-- 4段目: 著作権 + 法務リンク -->
+    <div class="footer-bottom">
+      <div class="footer-copy">&copy; Stock Value, Inc.</div>
+      <div class="footer-legal">
         <a href="privacy.html">プライバシーポリシー</a>
         <a href="terms.html">利用規約</a>
       </div>
-      <div class="copyright">© Stock Value, Inc.</div>
     </div>
   </footer>
 
-  <script>
-    // アプリ本体は GitHub のリリースに置いてある (Pages は 100MB を超えるファイルを置けない)。
-    //
-    // 2026-07-26 の事故と対策: ここにファイル名を「Sendy-0.1.0-arm64.dmg」と直書きしていたため、
-    // v0.2.0 を公開した瞬間にダウンロードが 404 になった (リリースごとにファイル名が変わるのに、
-    // ページ側は古い名前を指し続けていた)。版番号を二度と直書きせず、公開中の最新リリースに
-    // 実際に添付されている .dmg を GitHub に問い合わせて使う。
-    (function () {
-      // ダウンロードボタンはページ上部と下部の2か所にある。getElementById は最初の1つしか
-      // 返さないため、以前は下のボタンが href="#" のままで押しても何も起きなかった。全部に入れる。
-      var btns = document.querySelectorAll('#download-btn');
-      var setHref = function (url) {
-        Array.prototype.forEach.call(btns, function (b) { b.href = url; });
-      };
-      var API = 'https://api.github.com/repos/tkimurabusiness-debug/sendy-download/releases/latest';
-      // 問い合わせが失敗しても押せるように、まず最新リリースのページを入れておく。
-      setHref('https://github.com/tkimurabusiness-debug/sendy-download/releases/latest');
-
-      fetch(API, { headers: { Accept: 'application/vnd.github+json' } })
-        .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
-        .then(function (rel) {
-          var dmg = (rel.assets || []).filter(function (a) { return /\.dmg$/.test(a.name); })[0];
-          if (!dmg) return;
-          setHref(dmg.browser_download_url);
-          // 大きさと版番号もリリースの実物に合わせる (手で書き換える手間と間違いをなくす)。
-          // 1MB = 100万バイトで計算する。macOS の Finder と Safari のダウンロード表示が
-          // この数え方なので、利用者が実際に目にする数字と一致させる。
-          var mb = Math.round(dmg.size / 1e6);
-          Array.prototype.forEach.call(document.querySelectorAll('#dl-size'), function (el) {
-            el.textContent = '約 ' + mb + ' MB';
-          });
-          Array.prototype.forEach.call(document.querySelectorAll('#dl-ver'), function (el) {
-            el.textContent = rel.tag_name || '';
-          });
-        })
-        .catch(function () { /* 押せば最新リリースのページには行ける */ });
-    })();
-
-    // Copy the Gatekeeper-unlock command.
-    var copyBtn = document.getElementById('copy-cmd');
-    if (copyBtn) {
-      copyBtn.addEventListener('click', function () {
-        var cmd = document.getElementById('unlock-cmd').textContent;
-        var done = function () {
-          copyBtn.textContent = 'コピーしました';
-          copyBtn.classList.add('done');
-          setTimeout(function () { copyBtn.textContent = 'コピー'; copyBtn.classList.remove('done'); }, 1800);
-        };
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(cmd).then(done, function () {});
-        } else {
-          var r = document.createRange(); r.selectNodeContents(document.getElementById('unlock-cmd'));
-          var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
-          try { document.execCommand('copy'); done(); } catch (e) {}
-          sel.removeAllRanges();
-        }
-      });
-    }
-
-    // liquid-glass header: 最上部は全幅、少しでもスクロールしたら丸角ピルに収縮して浮く。
-    var header = document.getElementById('lgHeader');
-    // 正本仕様: scrollY>48 でピルへ。rAF で間引き、閾値にヒステリシスを持たせて
-    // 境界での往復 (ガタつき) を防ぐ。
-    var shrunk = false, ticking = false;
-    var apply = function () {
-      var y = window.scrollY;
-      if (!shrunk && y > 48) { shrunk = true; header.classList.add('shrunk'); }
-      else if (shrunk && y < 24) { shrunk = false; header.classList.remove('shrunk'); }
-      ticking = false;
-    };
-    var onScroll = function () { if (!ticking) { ticking = true; requestAnimationFrame(apply); } };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    // Reveal-on-scroll (CSS が prefers-reduced-motion を尊重する)。
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { rootMargin: '0px 0px -8% 0px' });
-    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
-  </script>
+<script type="module" src="js/services.js"></script>
+<script src="js/features.js"></script>
+<script src="js/footer.js"></script>
+<script src="js/download.js"></script>
 </body>
 </html>

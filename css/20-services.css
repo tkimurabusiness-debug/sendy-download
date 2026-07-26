@@ -1,0 +1,298 @@
+/* Sendy LP — S6「対応サービス」セクション単体デモ
+   トークン出典: /tmp/sendy-dl/design.md §1・§2(色・書体の正本)。
+   .prov-* 系のレイアウトは /tmp/sendy-dl/styles.css の既存クラス(215〜231行目)をそのまま移植して調整。
+   ゼロからCSSを書いていない箇所は各コメントに出典を明記。 */
+
+/* トークンの正本は css/00-base.css の :root。ここでは再定義しない
+   (再定義の衝突が「背景が白く化ける」事故の原因だった)。 */
+
+* { box-sizing: border-box; }
+
+/* body/html の既定と h1-h3 の書体は 00-base.css が持つ (重複定義を削除) */
+
+/* デモ確認用の前後余白(本番は前後に他セクションが続く) */
+.demo-spacer { height: 60vh; display: grid; place-items: center; color: var(--fg-faint); font-size: 13px; }
+
+/* =========================================================
+   S6-a. スクロール演出ステージ(散らばる → 集まる → 箱が閉じる)
+   構造の出典: /tmp/sendy-anim-refs/folding-cardboard-box/css/base.css の
+   .page(高さ300vh) + .container(position:fixed, 100vh) の考え方を踏襲。
+   ただしこのページは単体セクションではなく他セクションの間に挟まるため、
+   "fixed" ではなく GSAP ScrollTrigger 本体の pin オプションに置き換えている
+   (pin は unpin 処理を自動でやってくれるため、他セクションの上に張り付いたまま
+   残ってしまう事故がない)。 */
+.svc-stage {
+  position: relative;
+  height: 420vh;
+  background: var(--ink);
+}
+
+.svc-stage__pin {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.svc-scatter {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* アイコンは中央 (Sendy のアイコン) に重ねて置き、散らばりの分だけ x/y でずらす。
+   元画像は 256px 四方。表示は最大 72px なので、2倍・3倍の画面でも拡大にならない
+   (竹蔵「アイコンの画質がクソ悪い」の対策: 拡大を一切しない)。 */
+.svc-icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* 中央合わせの余白は「今のアイコンの半分」でなければならない。72px 時代の -36px が
+     残っていたため、拡大した分だけ位置がずれて重なっていた (竹蔵 2026-07-24
+     「アイコン拡大と同時に壊れている、全てが同時に出ている」の原因)。 */
+  margin-left: calc(clamp(88px, 10vw, 140px) / -2);
+  margin-top: calc(clamp(88px, 10vw, 140px) / -2);
+  /* 竹蔵 2026-07-24「集まってくるロゴたちもページに合わせて大きくして」
+     画面幅に追従させる (狭い画面では小さく・広い画面では大きく)。 */
+  width: clamp(88px, 10vw, 140px);
+  height: clamp(88px, 10vw, 140px);
+  border-radius: 18px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+  rotate: var(--r, 0deg);
+  will-change: transform, opacity;
+}
+
+/* 受け側: Sendy のアイコン */
+.svc-hubwrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  z-index: 2;
+}
+.svc-hub {
+  /* 竹蔵 2026-07-24「sendyのロゴをもっと大きくして」 */
+  width: clamp(176px, 19vw, 296px);
+  height: clamp(176px, 19vw, 296px);
+  border-radius: 30px;
+  box-shadow: 0 26px 60px rgba(59, 109, 255, 0.34), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  will-change: transform;
+}
+/* 取り込んだ瞬間に広がる輪 */
+.svc-ring {
+  position: absolute;
+  /* 竹蔵 2026-07-24「sendyのロゴをもっと大きくして」 */
+  width: clamp(176px, 19vw, 296px);
+  height: clamp(176px, 19vw, 296px);
+  border-radius: 34px;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, #3b6dff, #8b5cf6) border-box;
+  -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+}
+.svc-hub__count {
+  position: absolute;
+  bottom: -34px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.06em;
+}
+.svc-hub__count b { color: #fff; font-weight: 600; }
+
+.svc-dock {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 1px;
+  height: 1px;
+}
+
+.svc-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  z-index: 3;
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--fg-faint);
+}
+
+/* prefers-reduced-motion 時の静止フォールバック(design.md §7「reduced-motionは全部止める」)。
+   Sendy のアイコンを中央上に、対応サービスのアイコンをその下に並べて止め絵として見せる。 */
+.svc-static .svc-stage { height: auto; padding: 96px 24px 64px; }
+.svc-static .svc-stage__pin { position: static; height: auto; overflow: visible; }
+.svc-static .svc-hint { display: none; }
+.svc-static .svc-hubwrap { position: static; transform: none; margin: 0 auto 32px; }
+.svc-static .svc-ring { display: none; }
+.svc-static .svc-hub__count { display: none; }
+.svc-static .svc-scatter { position: static; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; max-width: 520px; margin: 0 auto; }
+.svc-static .svc-icon { position: static; opacity: 1 !important; transform: none !important; rotate: none !important; margin: 0; }
+
+/* =========================================================
+   S6-b. 一覧セクション(既存 styles.css の .prov-* を移植)
+   出典: /tmp/sendy-dl/styles.css 216〜231行目、キーフレームは220行目。
+   変数名だけ design.md の命名(--fg / --fg-dim / --fg-faint / --line)に合わせて置換。 */
+.svc-list {
+  padding: 88px 24px 120px;
+  background: var(--ink);
+}
+
+.section-head {
+  max-width: var(--maxw);
+  margin: 0 auto 44px;
+  text-align: center;
+}
+.section-head h2 { font-size: clamp(28px, 4vw, 40px); margin: 0 0 12px; letter-spacing: -0.01em; }
+.section-head p { margin: 0; color: var(--fg-dim); font-size: 14.5px; }
+
+.prov-group { max-width: var(--maxw); margin: 0 auto 34px; }
+.prov-label {
+  display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px;
+  margin-bottom: 14px; padding: 5px 13px; border-radius: 999px; border: 1px solid var(--line);
+  font-family: var(--font-body);
+}
+.prov-label.ok { color: #6ee7a8; background: rgba(110, 231, 168, 0.08); border-color: rgba(110, 231, 168, 0.22); }
+.prov-label.ok .dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #6ee7a8;
+  box-shadow: 0 0 0 0 rgba(110, 231, 168, 0.6); animation: svcPulse 2.4s infinite;
+}
+@keyframes svcPulse {
+  70% { box-shadow: 0 0 0 8px rgba(110, 231, 168, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(110, 231, 168, 0); }
+}
+.prov-label.soon { color: var(--fg-faint); }
+
+.prov-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 12px; }
+.prov {
+  display: flex; align-items: center; gap: 11px; padding: 13px 15px; border-radius: 14px;
+  background: var(--ink-deep); border: 1px solid var(--line); font-size: 13.5px;
+  transition: transform 200ms var(--ease), border-color 200ms var(--ease);
+}
+.prov:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.18); }
+.prov img { width: 28px; height: 28px; border-radius: 8px; flex: 0 0 auto; }
+/* 「iCloud メール」のような和欧混在の長い名前が中途半端な位置(「メ」と「ール」の間など)で
+   折り返さないように。竹蔵の指示 (CSS.md §5) 通り、実データ長で確認して見つけた修正。 */
+.prov span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* =========================================================
+   「対応サービス」節の作り込み (竹蔵指摘②「一覧を並べただけで素っ気ない」への対応)
+   単に全項目をカードに揃えるのは CSS.md §3 が禁止する「カード羅列」そのものなので避け、
+   動作確認済み(主役)と近日対応(補足)の扱いを意図的に変えて情報の重み付けを作る。
+   カードの縁取り+内側の枠線という二重の縁取りは実在サイトの実装を下敷きにした
+   (出典: /tmp/sendy-refs/leonardo/30d3db23b2242214.css
+    .LearnSlider-module__g1C4la__cardImageWrapper
+    { border:4px solid var(--card-color); box-shadow:inset 0 0 0 4px var(--color-black) }
+    の「外枠 border + 内枠 inset box-shadow」の二重縁取りを、Sendy のトークン値に置き換えて移植)。
+   ========================================================= */
+
+/* 動作確認済み: 主役なので枠付きカード + ホバーで持ち上がる */
+.prov-grid--featured { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+.prov--featured {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 18px 18px;
+  border-radius: 20px;   /* design.md §2: カードの角丸は20px */
+  background: var(--ink-deep);
+  border: 1px solid var(--line);
+  transition: transform 260ms var(--ease), border-color 260ms var(--ease), box-shadow 260ms var(--ease);
+}
+.prov--featured:hover {
+  transform: translateY(-3px);
+  border-color: rgba(139, 92, 246, 0.4);
+  /* アクセントは面積を小さく (design.md §2)。カード背景ではなく影の色だけに使う。 */
+  box-shadow: 0 18px 40px rgba(59, 109, 255, 0.16);
+}
+/* アイコンの外枠 + 内側の細い枠線 (leonardo cardImageWrapper の二重縁取りを移植)。
+   アイコン画像そのものには一切手を加えない (竹蔵の指示)。枠だけを足す。 */
+.prov-frame {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-media);   /* 24px の画像枠トークンを再利用 */
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+.prov-frame img { width: 30px; height: 30px; border-radius: 7px; }
+.prov-name { font-size: 14.5px; font-weight: 500; color: var(--fg); }
+
+/* 近日対応: 補足の情報なので、カードにはせず控えめな一列のタグにする
+   (動作確認済みと同じカード見た目を繰り返すと「カード羅列」の反復になり単調になるため、
+   あえて見た目の言語を変えて「まだ主役ではない」を一目で伝える)。 */
+.prov-tags { display: flex; flex-wrap: wrap; gap: 9px; max-width: var(--maxw); }
+.prov-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 14px 7px 8px;
+  border-radius: 999px;   /* design.md §2: ピルの角丸は9999px */
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--fg-faint);
+  white-space: nowrap;
+}
+.prov-tag img { width: 20px; height: 20px; border-radius: 6px; filter: grayscale(1); opacity: 0.75; }
+
+/* reveal-on-scroll: /tmp/sendy-dl/styles.css 283〜284行目をそのまま移植 */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 620ms var(--ease), transform 620ms var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+  .dot { animation: none !important; }
+}
+
+@media (max-width: 900px) {
+  .svc-list { padding: 64px 20px 90px; }
+  .prov-grid { grid-template-columns: repeat(auto-fill, minmax(154px, 1fr)); }
+}
+
+/* ---- 背景でずっと動く層 (Canvas UI clouds・バニラ版) ---- */
+.svc-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.svc-bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.svc-bg__src { opacity: 0; }
+.svc-bg__content { position: absolute; inset: 0; }
+.svc-bg__out { opacity: 0.26; }   /* 主役はアイコン。背景は気配だけ残す */
+
+
+/* 竹蔵 2026-07-26「見出しとして全てのアプリを1つにみたいな感じで。文字色はアクセントカラーで」。
+   アイコンが集まる演出の上に重ねる。演出の邪魔をしないよう当たり判定は切る。
+   色は 00-base.css の --acc (青 #3b6dff → 紫 #8b5cf6) をそのまま文字に流し込む。
+   新しい色は足さない (CSS.md: 土台の上に積む)。 */
+.svc-stage__title {
+  position: absolute;
+  top: clamp(48px, 9vh, 104px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  margin: 0;
+  white-space: nowrap;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: clamp(30px, 4.4vw, 60px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--accent-from);          /* 背景切り抜きに対応しない環境の代わりの色 */
+  background: var(--acc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  pointer-events: none;
+}
+@media (max-width: 640px) {
+  /* 狭い画面では1行に収まらないので、折り返しを許す */
+  .svc-stage__title { white-space: normal; max-width: 86vw; line-height: 1.3; text-align: center; }
+}

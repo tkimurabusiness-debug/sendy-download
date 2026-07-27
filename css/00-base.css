@@ -141,7 +141,9 @@ a { color: inherit; text-decoration: none; }
   object-fit: contain;
   filter: drop-shadow(0 24px 48px rgba(20,20,60,0.45));
 }
-.hero-body h1 { font-size: 40px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; }
+/* word-break: keep-all は「単語の途中で折り返さない」。<wbr> を置いた文節の境目でだけ
+   改行させる。これが無いと幅390で「片 / づける」のように語が割れる (2026-07-27 実測)。 */
+.hero-body h1 { font-size: 40px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; word-break: keep-all; }
 /* 見出しに <br> を使わない代わりに、文ごとにブロックで行を分ける (design.md §1) */
 .h1-line { display: block; }
 .lead { margin-top: 20px; max-width: 380px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.72); }
@@ -305,6 +307,34 @@ a { color: inherit; text-decoration: none; }
 .foot-links a:hover { color: var(--ink); }
 .copyright { margin-left: auto; font-size: 12.5px; color: var(--ink-3); }
 
+/* ---------- 会社概要 (竹蔵の指示: ロゴ + stockvalue.co.jp への dofollow のリンク) ---------- */
+.company { background: var(--ink-deep); border-top: 1px solid var(--line); padding: 96px 24px; }
+.company-inner {
+  max-width: var(--maxw); margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 56px; align-items: center;
+}
+.company-logo { display: block; }
+.company-logo img { width: 100%; max-width: 260px; height: auto; opacity: 0.92; transition: opacity 200ms ease; }
+.company-logo:hover img { opacity: 1; }
+.company-body h2 {
+  margin: 0 0 14px; font-family: var(--font-head); font-weight: 800;
+  font-size: clamp(28px, 2.4vw, 38px); letter-spacing: -0.02em; word-break: keep-all;
+}
+.company-body p { margin: 0 0 26px; max-width: 52ch; font-size: 15px; line-height: 1.9; color: var(--fg-dim); }
+.company-body a { color: #fff; border-bottom: 1px solid rgba(255,255,255,0.28); transition: border-color 180ms ease; }
+.company-body a:hover { border-bottom-color: var(--accent-to); }
+.company-facts { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.company-facts > div { display: flex; gap: 16px; align-items: baseline; border-top: 1px solid var(--line); padding-top: 10px; }
+.company-facts dt { flex: 0 0 88px; font-size: 12.5px; color: var(--fg-faint); }
+.company-facts dd { margin: 0; font-size: 14px; color: rgba(255,255,255,0.86); }
+
+@media (max-width: 900px) {
+  .company { padding: 64px 20px; }
+  .company-inner { grid-template-columns: 1fr; gap: 32px; }
+  .company-logo img { max-width: 190px; }
+  .company-facts dt { flex-basis: 76px; }
+}
+
 /* ---------- reveal ---------- */
 .reveal { opacity: 0; transform: translateY(16px); transition: opacity 620ms ease, transform 620ms cubic-bezier(0.22, 1, 0.36, 1); }
 .reveal.in { opacity: 1; transform: none; }
@@ -314,7 +344,11 @@ a { color: inherit; text-decoration: none; }
   .hero-inner { grid-template-columns: 1fr; gap: 36px; }
   .hero-shot-wrap { transform: none; }
   .cards, .privacy-grid { grid-template-columns: 1fr; }
+  /* 狭い画面ではページ内の案内を隠す。案内が margin-left:auto を持っていたので、
+     隠すとダウンロードのボタンが左のブランド名にくっついてしまう。ボタン側に移す。 */
   .lg-nav { display: none; }
+  .lg-cta { margin-left: auto; }
+  .lg-header.shrunk .lg-inner { max-width: calc(100% - 24px); }
   .section { padding: 68px 20px; }
 }
 

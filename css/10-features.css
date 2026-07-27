@@ -22,7 +22,10 @@
 .fx2-grid {
   position: relative;
   height: 100%;
-  max-width: var(--maxw);
+  /* **この節だけ枠を広げる。** 他の節と同じ 1120px に閉じ込めると、映像が 512px までしか
+     大きくならず、1280px の画面で左右に 500px 以上の黒が残っていた
+     (竹蔵「動画とかもっと大きく表示したい」)。1440px まで許すと映像は 691px になる。 */
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0 24px;
   /* 映像の幅。JavaScript でも実測して入れ直すが、その計算を待たずに正しい値になるよう
@@ -35,7 +38,9 @@
      枠の最大幅 1120px より画面が広い時にずれる (2026-07-26 実測: 46vw = 662px は
      枠 1120px の 59% にあたり、文章のために空けた 50% を食い破って 126px 重なった)。
      映像 46% + 文章 50% = 96% なので必ず横に並ぶ。 */
-  --fx2-mw: 46%;
+  /* **映像の幅を 46% から 54% へ広げた** (2026-07-27)。
+     映像 54% + 文章 43% = 97% なので、必ず横に並び、間に 3% (約 37px) の空きが残る。 */
+  --fx2-mw: 54%;
   --fx2-gap: 56px;
 }
 
@@ -46,7 +51,7 @@
      (割合で書いた幅を calc の height に渡すと、枠の「高さ」に対する割合と解釈されて壊れる)。 */
   width: var(--fx2-mw);
   aspect-ratio: 16 / 10;
-  max-height: 72vh;
+  max-height: 84vh;
   top: 50%;
   translate: 0 -50%;
   border-radius: var(--radius-media);
@@ -68,8 +73,15 @@
    1つおきに右端へ移動する (js/features.js の mediaX)。そのため映像が右に来た回で
    文章と重なっていた (竹蔵 2026-07-25「動画のところで食い込んでたり」)。
    映像の幅は横幅の34%までなので、画面を半分で割れば必ず衝突しない。 */
-.fx2-text[data-side="right"] { left: 50%; right: 24px; }
-.fx2-text[data-side="left"]  { left: 24px; right: 50%; }
+/* 映像を 54% に広げたので、境目も 50% から動かす。**左右で数字が違うことに意味がある。**
+   映像は端から 24px 内側に置くので、
+     左に寄せた時の右端 = 24px + 54%  ≒ 56%  → 右の文章は 57% から始める
+     右に寄せた時の左端 = 100% - 24px - 54% ≒ 44%  → 左の文章は 43% で終える
+                                                    (= right: 57%)
+   ここを両方 43% にしていたため、映像が右に居る回に左の文章と 165px 重なっていた
+   (2026-07-27 の実測。竹蔵「動画のところで食い込んでたり」と同じ壊れ方)。 */
+.fx2-text[data-side="right"] { left: 57%; right: 24px; }
+.fx2-text[data-side="left"]  { left: 24px; right: 57%; }
 .fx2-text-inner { opacity: 0; visibility: hidden; }
 
 /* 文字組は旧 10-features.css の .feature-text h2 / p と同値 */
@@ -100,12 +112,14 @@
      文字が映像へ食い込んでいた (竹蔵 2026-07-25「まだこの辺治ってねえ」)。
      映像は上から3vh・高さ44vh、文章は上から50vh 以降。重なりようがない配分にする。 */
   .fx2-media {
-    /* 狭い画面は横幅いっぱいに置く (横長なので縦は自然に低くなる) */
-    left: 20px !important; right: 20px; translate: none;
-    top: 6vh; width: auto; height: calc((100vw - 40px) * 10 / 16); max-height: 40vh;
+    /* 狭い画面は横幅いっぱいに置く (横長なので縦は自然に低くなる)。
+       画面の端からの余白を 20px から 12px へ詰めて、映像を少しでも大きくする。 */
+    left: 12px !important; right: 12px; translate: none;
+    top: 13vh; width: auto; height: calc((100vw - 24px) * 10 / 16); max-height: 42vh;
   }
   .fx2-text[data-side="right"], .fx2-text[data-side="left"] {
-    left: 20px; right: 20px; top: 50vh; bottom: auto; translate: none;
+    /* 映像は 13vh から始まって高さ最大 42vh なので、下端は 55vh。文章はその下から置く。 */
+    left: 20px; right: 20px; top: 58vh; bottom: auto; translate: none;
   }
   .fx2-text h2 { font-size: clamp(28px, 7vw, 40px); }
   .fx2-text p { font-size: 15px; line-height: 1.8; }

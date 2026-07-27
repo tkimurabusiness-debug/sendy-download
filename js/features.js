@@ -135,33 +135,42 @@
 
         var isNarrow = function () { return innerWidth <= 900; };
         var mediaX = function (i) {
-          // 狭い画面では左右の行き来をしない。CSS の translate -50% (中央固定) は GSAP が
-          // 自分の transform に取り込むため、目標 0 だと中央固定が外れて右へずれる。
-          // 中央のまま留めるには -幅/2 を目標にする (2026-07-25 実測で発見した案A-2の修正)。
-          if (isNarrow()) return -media.offsetWidth / 2;
+          // 狭い画面では左右の行き来をしない。**目標は 0 (動かさない)。**
+          // 以前はここが -幅/2 だった。これは CSS が映像を translate -50% で中央に
+          // 置いていた頃の打ち消しの値で、今の CSS は狭い画面で translate: none に
+          // なっている。打ち消す相手が無いのに半分ずらすので、幅390では映像が
+          // 画面の左外へ半分はみ出して切れていた (2026-07-27 スクリーンショットで確認)。
+          if (isNarrow()) return 0;
           return i % 2 ? grid.clientWidth - 48 - media.offsetWidth : 0;
         };
+
+        // ---- 1つの強みから次へ移る時の時間割 (単位はタイムライン上の 1 = 強み1つ分) ----
+        // **順番を守らないと映像と文字が重なる。**
+        //   ① 前の見出しを消す → ② 映像が反対側へ飛ぶ → ③ 次の見出しを出す
+        // 以前は ③ が ② より先に始まっていたため、映像がまだ元の場所に居るうちに
+        // 次の見出しが同じ場所へ出て、文字の上に映像が乗っていた
+        // (竹蔵 2026-07-26「動画のところのセクションまだ潰れている」の一因)。
+        // どの見出しも出ていない区間は ①の終わり(-0.18) から ③の始まり(-0.02) までの
+        // 0.16 = 画面にして約190px に抑えている。その間は映像が横切っているので、
+        // 「消えた」ではなく「移り変わっている」に見える。
+        var T_OUT = 0.28, D_OUT = 0.10;   // 前の見出しを消す
+        var T_MOVE = 0.20, D_MOVE = 0.18; // 映像が飛ぶ
+        var T_IN = 0.02, D_IN = 0.10;     // 次の見出しを出す
 
         texts.forEach(function (t, i) {
           var inner = t.querySelector('.fx2-text-inner');
           if (i > 0) {
             tl.to(media, {
               x: (function (idx) { return function () { return mediaX(idx); }; })(i),
-              duration: 0.35, ease: 'power2.inOut'
-            }, i);
+              duration: D_MOVE, ease: 'power2.inOut'
+            }, i - T_MOVE);
           }
-          // 前の見出しが消え切った時刻 ((i-1)+1.0 = i) に次を出し始める。
-          // 以前は i+0.18 から出していたので、**見出しが1つも出ていない区間**が
-          // 節の 3.6% (画面にして200px 以上) できていた。そこで止まると
-          // 「見出しが消えている」ように見える (竹蔵 2026-07-26)。
-          // 少しだけ重ねる (i-0.08 から出し始め、前の見出しは i+1.0 で消え切る)。
-          // ぴったり突き合わせにすると、境目のちょうど1点で**どの見出しも出ていない瞬間**が
-          // できてしまう (2026-07-26 実測: 節の 20% の地点で全部 opacity 0 だった)。
           tl.fromTo(inner, { autoAlpha: 0, y: 16 },
-            { autoAlpha: 1, y: 0, duration: 0.16, ease: 'none' },
-            i === 0 ? 0.02 : i - 0.08);
+            { autoAlpha: 1, y: 0, duration: D_IN, ease: 'none' },
+            i === 0 ? 0.02 : i - T_IN);
           if (i < texts.length - 1) {
-            tl.to(inner, { autoAlpha: 0, y: -16, duration: 0.14, ease: 'none' }, i + 0.86);
+            tl.to(inner, { autoAlpha: 0, y: -16, duration: D_OUT, ease: 'none' },
+              (i + 1) - T_OUT);
           }
         });
       }

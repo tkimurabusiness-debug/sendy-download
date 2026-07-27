@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="robots" content="noindex, nofollow" />
 <title>Sendy — 連絡を1か所に</title>
+<meta name="description" content="Messenger・LINE・LinkedIn・Gmail を1つの受信箱にまとめる macOS アプリ。読んでも相手に既読は付かず、返信はあなたの言い回しを学んだ下書きを承認するだけ。開発元は株式会社 Stock Value。" />
 <link rel="icon" href="assets/icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +17,25 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 </head>
 <body>
+  <!-- ============================================================
+       ヘッダー (liquid-glass の作法。privacy.html / terms.html には入っていたが
+       このページだけ抜け落ちていた。最上部は全幅の四角、下へスクロールすると
+       丸いピルに縮んで浮く。**上へスクロールした時に姿を変える動きは入れない**
+       (竹蔵の指示)。css/00-base.css の .lg-header / js/header.js が中身。)
+  ============================================================ -->
+  <header class="lg-header" id="lgHeader">
+    <div class="lg-inner">
+      <a class="lg-brand" href="#top"><img src="assets/icon.png" alt="" /><span>Sendy</span></a>
+      <nav class="lg-nav" aria-label="ページ内の案内">
+        <a href="#providers">対応サービス</a>
+        <a href="#features">できること</a>
+        <a href="#company">会社概要</a>
+        <a href="https://stockvalue.co.jp/" rel="dofollow" target="_blank">Stock Value</a>
+      </nav>
+      <a class="lg-cta" href="#download">ダウンロード</a>
+    </div>
+  </header>
+
   <!-- ============================================================
        S0. ヒーロー (左右分割・承認済みの土台。触らない)
   ============================================================ -->
@@ -33,7 +52,7 @@
           <img src="assets/hero.png" alt="Sendy のプレビュー" class="hero-shot" />
           <!-- 見出しに句読点と <br> を使わない (design.md §1 / 竹蔵の厳命)。
                読点が要る長さなので文を2つに分け、行はブロック要素で分ける。 -->
-          <h1><span class="h1-line">連絡を1か所に</span><span class="h1-line">返信は<wbr>AIと<wbr>一緒に<wbr>片づける</span></h1>
+          <h1><span class="h1-line">連絡を1か所に</span><span class="h1-line">返信は<wbr>AIと<wbr>一緒に<wbr>片づける</span><!-- 文節の境目にだけ折り返しを許す (word-break: keep-all と組で使う) --></h1>
           <p class="lead">Messenger・LINE・LinkedIn・Gmail を1つの受信箱に。読んでも相手に既読は付かず、返信はあなたの言い回しを学んだ下書きを承認するだけ。</p>
           <ul class="features">
             <li>
@@ -90,7 +109,7 @@
     <div class="svc-stage__pin">
       <!-- 竹蔵 2026-07-26「見出しとして全てのアプリを1つにみたいな感じで。文字色はアクセントカラーで」。
            アイコンが集まる演出の上に置く。見出しに「、」「。」は使わない (竹蔵のルール)。 -->
-      <h2 class="svc-stage__title">すべてのアプリを ひとつに</h2>
+      <h2 class="svc-stage__title">すべての<wbr>アプリを<wbr> <wbr>ひとつに</h2>
       <!-- 背景でずっと動き続ける層 (Canvas UI の grid・バニラ版を取得してビルドしたもの)。
            tint は [0.388,0.394,0.982] の数値で渡す (文字列を渡すと緑に化ける)。 -->
       <div class="svc-bg" aria-hidden="true">
@@ -198,6 +217,27 @@
   </div>
 
   <!-- ============================================================
+       S9. 会社概要 (竹蔵の指示: ヘッダー・フッター・会社概要の3か所に
+       stockvalue.co.jp への dofollow のリンクと Stock Value のロゴを置く)
+  ============================================================ -->
+  <section class="company" id="company">
+    <div class="company-inner reveal">
+      <a class="company-logo" href="https://stockvalue.co.jp/" rel="dofollow" target="_blank" aria-label="株式会社 Stock Value のサイトへ">
+        <img src="assets/stockvalue-logo.png" alt="Stock Value" width="260" height="72" />
+      </a>
+      <div class="company-body">
+        <h2>開発元</h2>
+        <p>Sendy は<a href="https://stockvalue.co.jp/" rel="dofollow" target="_blank">株式会社 Stock Value</a>が作っています。中小企業の売上をつくる仕組みを、AI と一緒に作って渡す会社です。</p>
+        <dl class="company-facts">
+          <div><dt>会社名</dt><dd>株式会社 Stock Value</dd></div>
+          <div><dt>サイト</dt><dd><a href="https://stockvalue.co.jp/" rel="dofollow" target="_blank">stockvalue.co.jp</a></dd></div>
+          <div><dt>連絡先</dt><dd><a href="mailto:info@stockvalue.co.jp">info@stockvalue.co.jp</a></dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
        S10. フッター (Leonardo.ai を下敷き・design.md §5)
   ============================================================ -->
   <footer class="site-footer" id="footer">
@@ -207,7 +247,10 @@
         <img src="assets/icon.png" alt="" />
         <div class="footer-brand-lines">
           <span class="footer-brand-name">Sendy</span>
-          <span class="footer-brand-co">開発元 株式会社 Stock Value</span>
+          <a class="footer-brand-sv" href="https://stockvalue.co.jp/" rel="dofollow" target="_blank">
+            <span>開発元</span>
+            <img src="assets/stockvalue-logo.png" alt="株式会社 Stock Value" width="118" height="33" />
+          </a>
         </div>
       </div>
 
@@ -224,7 +267,9 @@
           <a href="terms.html">利用規約</a>
         </div>
         <div class="footer-col">
-          <div class="footer-col-title">問い合わせ</div>
+          <div class="footer-col-title">開発元</div>
+          <a href="https://stockvalue.co.jp/" rel="dofollow" target="_blank">株式会社 Stock Value</a>
+          <a href="#company">会社概要</a>
           <a href="mailto:info@stockvalue.co.jp">info@stockvalue.co.jp</a>
         </div>
         <!-- 竹蔵採用 C-3 (2026-07-25): ダウンロードは独立した段をやめ、1段目の4列目に入れる -->
@@ -257,6 +302,7 @@
     </div>
   </footer>
 
+<script src="js/header.js"></script>
 <script type="module" src="js/services.js"></script>
 <script src="js/features.js"></script>
 <script src="js/footer.js"></script>

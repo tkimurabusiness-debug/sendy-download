@@ -274,7 +274,9 @@
    新しい色は足さない (CSS.md: 土台の上に積む)。 */
 .svc-stage__title {
   position: absolute;
-  top: clamp(48px, 9vh, 104px);
+  /* ヘッダーは高さ 64px + 上の余白 14px の位置に浮くので、見出しは 96px より下から置く
+     (2026-07-27: 幅390でヘッダーの下に見出しが潜っていた)。 */
+  top: clamp(96px, 11vh, 128px);
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
@@ -294,5 +296,6 @@
 }
 @media (max-width: 640px) {
   /* 狭い画面では1行に収まらないので、折り返しを許す */
-  .svc-stage__title { white-space: normal; max-width: 86vw; line-height: 1.3; text-align: center; }
+  /* 折り返しは許すが、単語の途中では切らせない (「すべてのアプ / リをひとつに」の事故) */
+  .svc-stage__title { white-space: normal; max-width: 86vw; line-height: 1.3; text-align: center; word-break: keep-all; }
 }

@@ -57,6 +57,30 @@
   font-weight: 300;
   color: var(--fg-faint);
 }
+/* 開発元の Stock Value のロゴ (stockvalue.co.jp への dofollow のリンク・竹蔵の指示) */
+.footer-brand-sv {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+.footer-brand-sv span {
+  font-size: 11.5px;
+  font-weight: 300;
+  color: var(--fg-faint);
+  white-space: nowrap;
+}
+.footer-brand-sv img {
+  width: 118px;
+  height: auto;
+  /* .footer-brand img の角丸と 1px の縁取りは Sendy のアイコン用。Stock Value の
+     ロゴにも掛かって四角い枠が見えていたので、ここで打ち消す。 */
+  border-radius: 0;
+  box-shadow: none;
+  opacity: 0.78;
+  transition: opacity 180ms ease;
+}
+.footer-brand-sv:hover img { opacity: 1; }
 
 .footer-cols {
   display: grid;
@@ -116,6 +140,10 @@
   align-self: flex-start;
 }
 .footer-col .footer-download-meta { font-size: 11.5px; }
+/* `.footer-col a` の薄い文字色が `.footer-dl-btn` の白より詳細度で勝っていて、
+   ボタンの文字が灰色に沈んでいた (liquid-glass-header の手順書にある「リセットが
+   ボタンの色に勝つ」の型と同じ事故)。親クラス付きで明示して打ち消す。 */
+.footer-col a.footer-dl-btn { color: #fff; }
 /* opt/footer-3.css どおり: 900px 以下は2列 (768px で 4列がはみ出すため) */
 @media (max-width: 900px) {
   .footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }

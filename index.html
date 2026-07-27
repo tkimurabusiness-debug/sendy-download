@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Sendy — 連絡を1か所に</title>
-<meta name="description" content="Messenger・LINE・LinkedIn・Gmail を1つの受信箱にまとめる macOS アプリ。読んでも相手に既読は付かず、返信はあなたの言い回しを学んだ下書きを承認するだけ。開発元は株式会社 Stock Value。" />
+<meta name="description" content="Messenger・LINE・Instagram・LinkedIn・Slack・Discord・Gmail を1つの受信箱にまとめる macOS アプリ。読んでも相手に既読は付かず、返信はあなたの言い回しを学んだ下書きを承認するだけ。開発元は株式会社 Stock Value。" />
 <link rel="icon" href="assets/icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -109,7 +109,7 @@
     <div class="svc-stage__pin">
       <!-- 竹蔵 2026-07-26「見出しとして全てのアプリを1つにみたいな感じで。文字色はアクセントカラーで」。
            アイコンが集まる演出の上に置く。見出しに「、」「。」は使わない (竹蔵のルール)。 -->
-      <h2 class="svc-stage__title">すべての<wbr>アプリを<wbr> <wbr>ひとつに</h2>
+      <h2 class="svc-stage__title">すべてのアプリをひとつに</h2>
       <!-- 背景でずっと動き続ける層 (Canvas UI の grid・バニラ版を取得してビルドしたもの)。
            tint は [0.388,0.394,0.982] の数値で渡す (文字列を渡すと緑に化ける)。 -->
       <div class="svc-bg" aria-hidden="true">
@@ -150,10 +150,16 @@
 
     <div class="prov-group reveal">
       <div class="prov-label ok"><span class="dot"></span>動作確認済み</div>
+      <!-- 2026-07-27 竹蔵「あとここは対応したでしょ Slack Discord Instagram」。
+           Slack と Discord は中に web 画面を置く形で、Instagram は Instagram の窓口を
+           直接叩く形で動くようになったので、近日対応から動作確認済みへ移した。 -->
       <div class="prov-grid prov-grid--featured">
         <div class="prov prov--featured"><span class="prov-frame"><img src="assets/messenger.png" alt="" /></span><span class="prov-name">Messenger</span></div>
         <div class="prov prov--featured"><span class="prov-frame"><img src="assets/line.png" alt="" /></span><span class="prov-name">LINE</span></div>
+        <div class="prov prov--featured"><span class="prov-frame"><img src="assets/instagram.png" alt="" /></span><span class="prov-name">Instagram</span></div>
         <div class="prov prov--featured"><span class="prov-frame"><img src="assets/linkedin.png" alt="" /></span><span class="prov-name">LinkedIn</span></div>
+        <div class="prov prov--featured"><span class="prov-frame"><img src="assets/slack.png" alt="" /></span><span class="prov-name">Slack</span></div>
+        <div class="prov prov--featured"><span class="prov-frame"><img src="assets/discord.png" alt="" /></span><span class="prov-name">Discord</span></div>
         <div class="prov prov--featured"><span class="prov-frame"><img src="assets/gmail.png" alt="" /></span><span class="prov-name">Gmail</span></div>
       </div>
     </div>
@@ -161,10 +167,8 @@
     <div class="prov-group reveal">
       <div class="prov-label soon">近日対応</div>
       <div class="prov-tags">
-        <span class="prov-tag"><img src="assets/slack.png" alt="" />Slack</span>
-        <span class="prov-tag"><img src="assets/discord.png" alt="" />Discord</span>
-        <span class="prov-tag"><img src="assets/instagram.png" alt="" />Instagram</span>
         <span class="prov-tag"><img src="assets/chatwork.png" alt="" />Chatwork</span>
+        <span class="prov-tag"><img src="assets/x.png" alt="" />X</span>
         <span class="prov-tag"><img src="assets/icloud-mail.png" alt="" />iCloud メール</span>
         <span class="prov-tag"><img src="assets/outlook.png" alt="" />Outlook</span>
       </div>
@@ -185,7 +189,7 @@
         <div class="fx2-text" data-side="right">
           <div class="fx2-text-inner">
             <h2>1つの<wbr>受信箱に<wbr>まとまる</h2>
-            <p>Messenger・LINE・LinkedIn・Gmail をひとつの画面で読み書きできます。アプリを行き来する必要がなくなります。</p>
+            <p>Messenger・LINE・Instagram・LinkedIn・Slack・Discord・Gmail をひとつの画面で読み書きできます。アプリを行き来する必要がなくなります。</p>
           </div>
         </div>
         <div class="fx2-text" data-side="left">

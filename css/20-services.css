@@ -281,7 +281,12 @@
   transform: translateX(-50%);
   z-index: 3;
   margin: 0;
+  /* 広い画面では1行。**<wbr> (改行してよい印) を本文に入れてはいけない** —
+     Chromium 系は white-space: nowrap を指定していても <wbr> の位置で改行するため、
+     広い画面でも「すべてのアプリを / ひとつに」と割れた (竹蔵 2026-07-27 の指摘)。
+     狭い画面の折り返しは下の @media だけで面倒を見る。 */
   white-space: nowrap;
+  text-align: center;
   font-family: var(--font-head);
   font-weight: 800;
   font-size: clamp(30px, 4.4vw, 60px);

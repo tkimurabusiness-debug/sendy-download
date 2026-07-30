@@ -85,6 +85,14 @@
         </a>
         <div class="dl-meta"><span id="dl-size">最新版</span> · <span id="dl-ver">macOS</span> · .dmg</div>
 
+        <!-- 機種ちがいの入口。js/download.js が「最新のリリース」から実物の行き先を入れる。
+             見つからない機種の行は、js が丸ごと消す (押して 404 にしない)。
+             Windows はまだ試験中なので、そう書いてある (竹蔵 2026-07-30「一応テスト版だけど」)。 -->
+        <div class="dl-alt" id="dl-alt">
+          <a id="dl-intel" class="dl-alt-link" rel="noopener" hidden>Intel の Mac をお使いの方はこちら</a>
+          <a id="dl-win" class="dl-alt-link" rel="noopener" hidden>Windows 版（試験中）</a>
+        </div>
+
         <div class="note">
           <div class="note-title">Messenger の過去のやり取りが出てこないとき</div>
           <p class="note-p">Messenger の暗号化されたチャットは、<b>会話ごとに1回だけ取り込み操作</b>が必要です。画面上部の <b>相手の名前</b> を押してチャット設定を開き、<b>「過去の履歴を復元」</b> を押してください。</p>

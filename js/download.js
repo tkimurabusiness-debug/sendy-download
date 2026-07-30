@@ -88,6 +88,9 @@
       /* 下の小さい行には「主のボタンで渡していない方」を出す。 */
       setAlt('dl-intel', pick === intel ? null : intel, 'Intel の Mac をお使いの方はこちら');
       setAlt('dl-win', pick === win ? null : win, 'Windows 版（試験中）');
+      /* 署名が無いことの案内は、Windows 版が実際に配られている時だけ出す。 */
+      var note = document.getElementById('dl-win-note');
+      if (note) note.hidden = !win;
       if (isWindows()) {
         /* Windows の人には、Mac 版への入口も1本だけ出しておく。 */
         setAlt('dl-intel', arm, 'Mac（M シリーズ）をお使いの方はこちら');

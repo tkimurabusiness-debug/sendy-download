@@ -85,18 +85,34 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg>
           <span>Sendy をダウンロード</span>
         </a>
-        <div class="dl-meta"><span id="dl-size">最新版</span> · <span id="dl-ver">macOS</span> · .dmg</div>
+        <div class="dl-meta"><span id="dl-ver">macOS</span> · <span id="dl-size">最新版</span> · .dmg</div>
 
         <!-- 機種ちがいの入口。js/download.js が「最新のリリース」から実物の行き先を入れる。
              見つからない機種の行は、js が丸ごと消す (押して 404 にしない)。
              Windows はまだ試験中なので、そう書いてある (竹蔵 2026-07-30「一応テスト版だけど」)。 -->
-        <div class="dl-alt" id="dl-alt">
-          <a id="dl-intel" class="dl-alt-link" rel="noopener" hidden>Intel の Mac をお使いの方はこちら</a>
-          <a id="dl-win" class="dl-alt-link" rel="noopener" hidden>Windows 版（試験中）</a>
-          <!-- Windows 版には署名が付いていない (別の証明書が要る)。押した先で青い警告が出るので、
-               何が起きるかを先に書いておく。書かないと「壊れている」と思われる。 -->
-          <p id="dl-win-note" class="dl-alt-note" hidden>Windows 版は試験中です。開くと「WindowsによってPCが保護されました」と出るので、<b>詳細情報</b> → <b>実行</b> を押してください。</p>
+        <!-- 竹蔵 2026-08-01「ちっちゃくしないで apple シリコン版とちゃんと同じ感じのボタンに
+             して欲しいかな intel 版も、あとちゃんとそれぞれ分かりやすくしてね」
+             → 小さい下線のリンクをやめ、**3つとも同じ大きさのボタン**にする。
+             自分の機械に合う物だけ色を付け、他は枠線にする (どれを押せばよいか迷わせない)。
+             資産が無い機種のボタンは js が丸ごと消す (押して 404 にしない)。 -->
+        <p class="dl-picks-lead">別の機種をお使いの方はこちら</p>
+        <div class="dl-picks" id="dl-alt">
+          <a id="dl-arm" class="dl-pick" rel="noopener" hidden>
+            <span class="dl-pick-name">Mac（M1 以降）</span>
+            <span class="dl-pick-sub">Apple シリコン · .dmg</span>
+          </a>
+          <a id="dl-intel" class="dl-pick" rel="noopener" hidden>
+            <span class="dl-pick-name">Mac（Intel）</span>
+            <span class="dl-pick-sub">2020年ごろまでの Mac · .dmg</span>
+          </a>
+          <a id="dl-win" class="dl-pick" rel="noopener" hidden>
+            <span class="dl-pick-name">Windows</span>
+            <span class="dl-pick-sub">試験中 · .exe</span>
+          </a>
         </div>
+        <!-- Windows 版には署名が付いていない (別の証明書が要る)。押した先で青い警告が出るので、
+             何が起きるかを先に書いておく。書かないと「壊れている」と思われる。 -->
+        <p id="dl-win-note" class="dl-alt-note" hidden>Windows 版は試験中です。開くと「WindowsによってPCが保護されました」と出るので、<b>詳細情報</b> → <b>実行</b> を押してください。</p>
 
         <div class="note">
           <div class="note-title">Messenger の過去のやり取りが出てこないとき</div>

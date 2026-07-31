@@ -52,13 +52,22 @@
     }
   }
 
-  /* 機種ちがいの行。**資産が無ければ行ごと消す** (押して 404 にしない)。 */
-  function setAlt(id, asset, label) {
+  /* 機種ごとのボタン。**3つとも同じ大きさ** (竹蔵 2026-08-01
+   *   「ちっちゃくしないで apple シリコン版とちゃんと同じ感じのボタンにして欲しいかな
+   *     intel 版も、あとちゃんとそれぞれ分かりやすくしてね」)。
+   * **資産が無ければ丸ごと消す** (押して 404 にしない)。
+   * `mine` が真の1つだけ色を付ける — どれを押せばよいかを迷わせない。 */
+  function setPick(id, asset, mine) {
     var el = document.getElementById(id);
     if (!el) return;
     if (!asset) { el.hidden = true; return; }
     el.setAttribute('href', asset.browser_download_url);
-    el.textContent = label + '（約 ' + Math.round(asset.size / 1048576) + ' MB）';
+    el.classList.toggle('is-mine', !!mine);
+    var sub = el.querySelector('.dl-pick-sub');
+    if (sub) {
+      var mb = Math.round(asset.size / 1048576);
+      sub.textContent = sub.textContent.replace(/\s*·\s*約 \d+ MB$/, '') + ' · 約 ' + mb + ' MB';
+    }
     el.hidden = false;
   }
 
@@ -85,16 +94,20 @@
         setAll(pick.browser_download_url, Math.round(pick.size / 1048576), rel.tag_name + suffix);
       }
 
-      /* 下の小さい行には「主のボタンで渡していない方」を出す。 */
-      setAlt('dl-intel', pick === intel ? null : intel, 'Intel の Mac をお使いの方はこちら');
-      setAlt('dl-win', pick === win ? null : win, 'Windows 版（試験中）');
+      /* 3つとも同じ大きさで出す。合う物だけ色を付ける。 */
+      // **主のボタンが渡す物は、下に出さない** (同じ物が2つ並ぶと迷う)。
+      // 下に出るのは「自分の機械ではない方」だけ。ただし**大きさは主のボタンと同じ**にする
+      // (竹蔵「ちっちゃくしないで apple シリコン版とちゃんと同じ感じのボタンに」)。
+      setPick('dl-arm', pick === arm ? null : arm, false);
+      setPick('dl-intel', pick === intel ? null : intel, false);
+      setPick('dl-win', pick === win ? null : win, false);
+      // 並ぶ物が1つも無い時は、見出しも消す (「こちら」と言って何も無いのを防ぐ)。
+      var lead = document.querySelector('.dl-picks-lead');
+      var shown = document.querySelectorAll('.dl-pick:not([hidden])').length;
+      if (lead) lead.hidden = shown === 0;
       /* 署名が無いことの案内は、Windows 版が実際に配られている時だけ出す。 */
       var note = document.getElementById('dl-win-note');
       if (note) note.hidden = !win;
-      if (isWindows()) {
-        /* Windows の人には、Mac 版への入口も1本だけ出しておく。 */
-        setAlt('dl-intel', arm, 'Mac（M シリーズ）をお使いの方はこちら');
-      }
     })
     .catch(function () { /* 取得できなければ FALLBACK のまま */ });
 })();

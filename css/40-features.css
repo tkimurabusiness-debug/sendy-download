@@ -135,3 +135,56 @@
   opacity: 0;
   pointer-events: none;
 }
+
+/* ── 機種ごとのダウンロードボタン (竹蔵 2026-08-01) ───────────────
+ *
+ *   「ちっちゃくしないで apple シリコン版とちゃんと同じ感じのボタンにして欲しいかな
+ *     intel 版も、あとちゃんとそれぞれ分かりやすくしてね」
+ *
+ * 直す前は、主のボタン1つ + 下に **12px の下線リンク**だった。
+ * Intel と Windows の人には「自分の物は添え物」に見える。3つとも同じ大きさにする。
+ * 色が付くのは**その機械に合う1つだけ**。迷わせないため。 */
+.dl-picks {
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+.dl-pick {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  min-height: 56px;              /* 主のボタン (.dl-btn) と同じ高さ */
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;           /* .dl-btn と同じ角丸 */
+  background: var(--bg-soft);
+  color: var(--fg);
+  text-decoration: none;
+  transition: border-color 0.2s var(--ease), transform 0.12s ease;
+}
+.dl-pick:hover { border-color: rgba(255, 255, 255, 0.3); }
+.dl-pick:active { transform: scale(0.985); }
+.dl-pick[hidden] { display: none; }
+.dl-pick-name { font-size: 14.5px; font-weight: 600; }
+.dl-pick-sub { font-size: 11.5px; color: var(--fg-dim); }
+
+/* その機械に合う1つだけ色を付ける。 */
+.dl-pick.is-mine {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent-from) 0%, var(--accent-to) 100%);
+  box-shadow: 0 10px 30px rgba(70, 80, 220, 0.28);
+}
+.dl-pick.is-mine .dl-pick-sub { color: rgba(255, 255, 255, 0.78); }
+.dl-pick.is-mine:hover { filter: brightness(1.06); }
+
+/* 「別の機種をお使いの方はこちら」の1行。**下に何が並ぶのかを先に言う**
+ * (竹蔵「ちゃんとそれぞれ分かりやすくしてね」)。並ぶ物が無い時は js が消す。 */
+.dl-picks-lead {
+  margin: 22px 0 10px;
+  font-size: 12.5px;
+  color: var(--fg-dim);
+  text-align: center;
+}
+.dl-picks-lead[hidden] { display: none; }

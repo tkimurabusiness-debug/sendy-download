@@ -12,7 +12,8 @@
 <link rel="stylesheet" href="css/00-base.css" />
 <link rel="stylesheet" href="css/10-features.css" />
 <link rel="stylesheet" href="css/20-services.css" />
-<link rel="stylesheet" href="css/30-footer.css" />
+<link rel="stylesheet" href="css/40-features.css" />
+  <link rel="stylesheet" href="css/30-footer.css" />
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 </head>
@@ -29,6 +30,7 @@
       <nav class="lg-nav" aria-label="ページ内の案内">
         <a href="#providers">対応サービス</a>
         <a href="#features">できること</a>
+        <a href="#roadmap">機能と要望</a>
         <a href="#company">会社概要</a>
         <a href="https://stockvalue.co.jp/" rel="dofollow" target="_blank">Stock Value</a>
       </nav>
@@ -235,6 +237,66 @@
   </div>
 
   <!-- ============================================================
+       S8b. 機能の一覧と 声の受け口 (竹蔵 2026-08-01)
+            「LP に実装済み機能、これから追加予定の機能 (ウェイトリスト的なボタンあると
+              面白そう) 希望機能とかバグ窓口とか設定したいかも」
+
+       送り先は Sendy 自身の受け口 (Cloudflare Worker)。**他社のフォームを使わない** —
+       「会話はあなたの Mac から出ません 預かりもしません」と言っている以上、
+       名前とメールを他社に預けると矛盾する。
+  ============================================================ -->
+  <section class="feat" id="roadmap">
+    <div class="feat-inner reveal">
+      <h2>今できること</h2>
+      <ul class="feat-grid" id="featDone"></ul>
+
+      <h2 class="feat-h2-next">これから足すもの</h2>
+      <p class="feat-lead">待っているものを押しておくと、できた時にお知らせします</p>
+      <ul class="feat-grid feat-grid--next" id="featNext"></ul>
+
+      <!-- ウェイトリスト -->
+      <form class="feat-form" id="waitForm" novalidate>
+        <label class="feat-label" for="waitEmail">できたら知らせてほしい方はこちら</label>
+        <div class="feat-row">
+          <input id="waitEmail" class="feat-input" type="email" inputmode="email"
+                 placeholder="mail@example.com" autocomplete="email" required />
+          <button class="feat-btn" type="submit">知らせてもらう</button>
+        </div>
+        <input class="feat-hp" id="waitHp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <p class="feat-note" id="waitNote" role="status"></p>
+      </form>
+
+      <div class="feat-two">
+        <!-- 希望する機能 -->
+        <form class="feat-form feat-form--half" id="wishForm" novalidate>
+          <label class="feat-label" for="wishText">こんな機能がほしい</label>
+          <textarea id="wishText" class="feat-area" rows="4"
+                    placeholder="例: カカオトークも1つの受信箱で読みたい" required></textarea>
+          <input id="wishEmail" class="feat-input feat-input--slim" type="email"
+                 placeholder="返事がいる方はメールアドレス（任意）" autocomplete="email" />
+          <input class="feat-hp" id="wishHp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <button class="feat-btn feat-btn--ghost" type="submit">送る</button>
+          <p class="feat-note" id="wishNote" role="status"></p>
+        </form>
+
+        <!-- 不具合の窓口 -->
+        <form class="feat-form feat-form--half" id="bugForm" novalidate>
+          <label class="feat-label" for="bugText">うまく動かないところ</label>
+          <textarea id="bugText" class="feat-area" rows="4"
+                    placeholder="例: メールの一覧に新しいメールが出てきません" required></textarea>
+          <input id="bugEmail" class="feat-input feat-input--slim" type="email"
+                 placeholder="返事がいる方はメールアドレス（任意）" autocomplete="email" />
+          <input class="feat-hp" id="bugHp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <button class="feat-btn feat-btn--ghost" type="submit">送る</button>
+          <p class="feat-note" id="bugNote" role="status"></p>
+        </form>
+      </div>
+
+      <p class="feat-privacy">送られるのは書いた文とメールアドレスだけです 会話の中身は送られません</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
        S9. 会社概要 (竹蔵の指示: ヘッダー・フッター・会社概要の3か所に
        stockvalue.co.jp への dofollow のリンクと Stock Value のロゴを置く)
   ============================================================ -->
@@ -323,7 +385,8 @@
 <script src="js/header.js"></script>
 <script type="module" src="js/services.js"></script>
 <script src="js/features.js"></script>
-<script src="js/footer.js"></script>
+<script src="js/feedback.js" defer></script>
+  <script src="js/footer.js"></script>
 <script src="js/download.js"></script>
 </body>
 </html>

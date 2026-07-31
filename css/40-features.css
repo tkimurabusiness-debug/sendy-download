@@ -1,0 +1,137 @@
+/* 機能の一覧と 声の受け口 (竹蔵 2026-08-01)。
+ *
+ * **このページに既にある決まりの上に積む。** 新しい色も角丸も作らない
+ * (~/.config/ai-rules/CSS.md: AI の手癖 CSS を書かない)。
+ * 使うのは 00-base.css が定義した --line / --bg-soft / --acc / --radius だけ。 */
+
+.feat {
+  padding: clamp(64px, 9vw, 120px) 0;
+  border-top: 1px solid var(--line);
+}
+.feat-inner {
+  max-width: min(1100px, 100% - 32px);
+  margin-inline: auto;
+}
+.feat h2 {
+  font-family: var(--font-head);
+  font-size: clamp(24px, 3.2vw, 38px);
+  letter-spacing: -0.01em;
+  margin: 0 0 24px;
+}
+.feat-h2-next { margin-top: clamp(56px, 7vw, 96px); }
+.feat-lead {
+  color: var(--fg-dim);
+  font-size: 15px;
+  margin: -12px 0 24px;
+}
+
+/* ── 一覧 ─────────────────────────────── */
+.feat-grid {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+.feat-item {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.feat-item b { font-size: 15px; font-weight: 600; }
+.feat-item span { color: var(--fg-dim); font-size: 13.5px; line-height: 1.55; }
+
+/* これから足すものは押せる (待っている物を選べる)。 */
+.feat-item--pick {
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+  position: relative;
+}
+.feat-item--pick:hover { border-color: rgba(255, 255, 255, 0.24); transform: translateY(-1px); }
+.feat-item--pick:focus-visible { outline: 2px solid var(--accent-to); outline-offset: 2px; }
+.feat-item--pick::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 14px;
+  inset-inline-end: 14px;
+  width: 16px; height: 16px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+.feat-item--pick.is-on { border-color: transparent; background-image: var(--acc); background-origin: border-box; }
+.feat-item--pick.is-on span { color: rgba(255, 255, 255, 0.82); }
+.feat-item--pick.is-on::after {
+  background: #fff;
+  border-color: #fff;
+  box-shadow: inset 0 0 0 4px var(--accent-to);
+}
+
+/* ── フォーム ───────────────────────────── */
+.feat-form { margin-top: 24px; }
+.feat-label { display: block; font-size: 14px; margin-bottom: 10px; }
+.feat-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.feat-input, .feat-area {
+  flex: 1 1 260px;
+  min-width: 0;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--fg);
+  font: inherit;
+  font-size: 15px;
+  padding: 12px 14px;
+}
+.feat-area { width: 100%; resize: vertical; line-height: 1.6; }
+.feat-input--slim { margin-top: 10px; width: 100%; font-size: 14px; }
+.feat-input:focus, .feat-area:focus { outline: none; border-color: rgba(255, 255, 255, 0.28); }
+.feat-btn {
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 12px;
+  background-image: var(--acc);
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 22px;
+  cursor: pointer;
+  transition: opacity 0.2s var(--ease);
+}
+.feat-btn:hover { opacity: 0.9; }
+.feat-btn--ghost {
+  margin-top: 12px;
+  background-image: none;
+  background: transparent;
+  border: 1px solid var(--line);
+}
+.feat-btn--ghost:hover { border-color: rgba(255, 255, 255, 0.28); opacity: 1; }
+.feat-note { color: var(--fg-dim); font-size: 13px; margin: 10px 0 0; min-height: 1.2em; }
+
+.feat-two {
+  margin-top: clamp(32px, 4vw, 56px);
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.feat-form--half { margin-top: 0; }
+
+.feat-privacy {
+  margin-top: 28px;
+  color: var(--fg-faint);
+  font-size: 12.5px;
+}
+
+/* 機械よけの隠し欄。**人には見えない** ので、入っていたら機械。
+   display:none は自動入力に無視されることがあるので、位置で隠す。 */
+.feat-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}

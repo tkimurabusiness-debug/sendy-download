@@ -45,7 +45,10 @@
   }
 
   // GSAP公式デモの imageSequence() (原型のまま。scrollTrigger は使わずタイムラインに載せる)
-  function imageSequenceTween(canvas, urls, gsapAvailable) {
+  // 2026-08-03: 4つ目の引数 span を足した。強みの文章の数だけタイムライン上の長さを取る。
+  // 前は 5 を直に書いていたので、文章を3つに減らした時に**後ろ2つ分が空の区間**になり、
+  // 何も出ないまま画面が固定され続けるはずだった。数を引数で受けて食い違いを無くす。
+  function imageSequenceTween(canvas, urls, gsapAvailable, span) {
     var playhead = { frame: 0 };
     var ctx = canvas.getContext('2d');
     var curFrame = -1;
@@ -90,7 +93,7 @@
       frame: images.length - 1,
       ease: 'none',
       onUpdate: updateImage,
-      duration: 5   // タイムライン上で 5 (=強み1つにつき1) の長さを占める
+      duration: span   // タイムライン上で「強みの数」ぶんの長さを占める (強み1つにつき1)
     });
   }
 
@@ -106,7 +109,8 @@
       var canvas = stage.querySelector('canvas');
       var texts = Array.prototype.slice.call(stage.querySelectorAll('.fx2-text'));
 
-      var seq = imageSequenceTween(canvas, urlsAll(), gsapAvailable);
+      // 画面に出ている文章の数をそのまま長さにする (HTML を減らせば動きも自動で短くなる)。
+      var seq = imageSequenceTween(canvas, urlsAll(), gsapAvailable, Math.max(1, texts.length));
 
       if (!gsapAvailable) {
         document.body.classList.add('fx2-static');

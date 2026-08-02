@@ -263,3 +263,251 @@
   text-align: center;
 }
 .dl-picks-lead[hidden] { display: none; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   2026-08-03 竹蔵「LPがどんどん汚くなってる 文字多すぎだし長すぎ
+   ちゃんと人によって刺さるように明確なキャッチ＋詳細な説明」
+
+   **0から書いていない。** 実在の製品ページを採寸して並べ方だけ移植した。
+   どのページの何を借りたかは REFERENCES.md に1行ずつ書いてある。
+     ・カードの中の順番と大きさ = Linear の機能一覧 (linear.app/features)
+     ・3つの入口の並べ方       = Notion Calendar (notion.com/product/calendar)
+     ・入口を役割で分ける発想   = Superhuman (superhuman.com)
+     ・名前と値を並べる格子     = Raycast のトップページ
+
+   色・書体・角丸は借りない。css/00-base.css の :root にある値だけを使う
+   (--line / --bg-soft / --fg / --fg-dim / --fg-faint / --radius / --acc /
+    --font-head / --ease / --accent-to)。**新しい色も角丸も作らない。**
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── 誰のための道具か (3つの入口) ────────────────────────────────
+   下敷き: Notion Calendar の 3列グリッド (実測 248.6px × 3 / column-gap 24px)。
+   枠が Sendy のほうが広い (1100px) ので、列幅は最小 260px の可変にする。 */
+.aud-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.aud-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+  padding: 28px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.2s var(--ease);
+}
+.aud-card:hover { border-color: rgba(255, 255, 255, 0.24); }
+.aud-title {
+  margin: 0;
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+.aud-desc {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--fg-dim);
+  flex: 1 1 auto;
+}
+/* 入口から下の一覧へ飛ぶ線。下線は引かず、矢印だけ動かす (Linear の作法)。 */
+.aud-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--fg);
+}
+.aud-link::after {
+  content: '→';
+  transition: transform 0.2s var(--ease);
+}
+.aud-link:hover::after { transform: translateX(3px); }
+
+/* ── できること (密な一覧) ──────────────────────────────────────
+   下敷き: Linear の機能一覧。実測は
+     枠 976px / grid-template-columns: 476px 476px / gap: 24px
+     カード padding 32px 24px / border-radius 16px
+     上に小さい灰色の分類名 13px・下に大きい白い1文 20px
+   Sendy は載せる機能が23個あるので、2列ではなく3列 (最小 300px) にして
+   縦の長さを詰める。gap と文字の大きさは Linear の実測をそのまま使う。 */
+.cap-group {
+  margin: clamp(44px, 5vw, 68px) 0 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-head);
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--fg-dim);
+  /* ページ内の案内から飛んだ時に、上の浮いているヘッダーで隠れないようにする。 */
+  scroll-margin-top: 96px;
+}
+.cap-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+.cap-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+  padding: 26px 24px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s var(--ease);
+}
+.cap-card:hover { border-color: rgba(255, 255, 255, 0.2); }
+/* 機能の名前。**主役にしない。** 小さく灰色で置く (Linear と同じ扱い)。 */
+.cap-kicker {
+  margin: 0 0 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--fg-faint);
+}
+/* 主役。**その人の困りごとが消えること**を書く行。 */
+.cap-title {
+  margin: 0 0 10px;
+  font-family: var(--font-head);
+  font-size: 19px;
+  line-height: 1.45;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+}
+.cap-desc {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--fg-dim);
+}
+
+/* 長い話は畳む (竹蔵「文字多すぎ」)。開くまで1行しか場所を取らない。 */
+.cap-more { margin-top: 14px; }
+.cap-more > summary {
+  cursor: pointer;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--fg-faint);
+  transition: color 0.2s var(--ease);
+}
+.cap-more > summary::-webkit-details-marker { display: none; }
+.cap-more > summary::before {
+  content: '+';
+  display: inline-grid;
+  place-items: center;
+  width: 15px; height: 15px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  font-size: 12px;
+  line-height: 1;
+}
+.cap-more[open] > summary::before { content: '−'; }
+.cap-more > summary:hover { color: var(--fg); }
+.cap-more > summary:focus-visible { outline: 2px solid var(--accent-to); outline-offset: 3px; border-radius: 4px; }
+.cap-more p {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--fg-dim);
+}
+
+/* 割り当ての一覧・道具の一覧。
+   下敷き: Raycast の Testimonials_highlight (実測 147.9px + 311.1px / gap 16px 24px)。 */
+.cap-keys { margin: 12px 0 0; display: flex; flex-direction: column; gap: 8px; }
+.cap-keys > div { display: flex; gap: 16px; align-items: baseline; }
+.cap-keys dt {
+  flex: 0 0 118px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.86);
+}
+.cap-keys dd { flex: 1 1 auto; margin: 0; font-size: 12.5px; color: var(--fg-dim); }
+
+@media (max-width: 560px) {
+  .cap-keys > div { flex-direction: column; gap: 2px; }
+  .cap-keys dt { flex: none; }
+}
+
+/* ── AI 向けの情報の節 ────────────────────────────────────────
+   人が読む節と**見た目でも分ける**。1段沈めて、上の節と地続きに見せない。 */
+.feat--ai { background: var(--ink-deep); }
+
+/* ── 対応サービスの補足の1行 (つなぎ方が2種類あることの説明) ───────── */
+.prov-note {
+  margin: -6px 0 12px;
+  font-size: 12.5px;
+  color: var(--fg-faint);
+}
+
+/* ── 畳んだ注意書き (Messenger の履歴の手順) ──────────────────── */
+.note--fold > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+}
+.note--fold > summary::-webkit-details-marker { display: none; }
+.note--fold > summary::after {
+  content: '+';
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.45);
+}
+.note--fold[open] > summary::after { content: '−'; }
+.note--fold[open] > summary { margin-bottom: 12px; }
+
+/* AI 向けの事実の一覧は**密に置く** (竹蔵「長すぎ」)。
+   下敷き: Raycast の footer (実測 146.6px × 6列 / gap 32px・説明文ゼロ)。
+   人が1行ずつ読む所ではないので、広い画面では2列に折り返して縦を半分にする。 */
+@media (min-width: 860px) {
+  .feat--ai .feat-ai-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 40px;
+    row-gap: 0;
+  }
+  .feat--ai .feat-ai-facts > div { padding-top: 7px; padding-bottom: 7px; }
+  /* 2列にすると 210px の欄は広すぎる (説明が細くなる)。Raycast の 148px に合わせる。 */
+  .feat--ai .feat-ai-facts dt { flex: 0 0 148px; }
+  .feat--ai .feat-ai-facts dd { flex: 1 1 auto; }
+}
+
+/* ここは人が1行ずつ味わう所ではない。**読める大きさは保ったまま**、行間と段の余白だけ詰める
+   (小さくしすぎると「機械にだけ見せている」と疑われる。12.5px は本文の 13.5px から
+   1段だけ落とした値で、注記の .feat-privacy と同じ大きさ)。 */
+.feat--ai .feat-ai-facts dt,
+.feat--ai .feat-ai-facts dd { font-size: 12.5px; line-height: 1.65; }
+.feat--ai .feat-ai-card h3 { margin: clamp(18px, 2vw, 24px) 0 8px; }
+.feat--ai .feat-ai-brief { font-size: 13px; line-height: 1.8; }
+
+/* ── 対応サービスの列と札 (2026-08-03) ─────────────────────────────
+   ・8個を6+2で折り返すと、2行目の右に大きな空きが出る。4列にして 4+4 に揃える。
+   ・2つ目の札は「読み書きは元の画面のまま」という**格下の扱い**なので、
+     1つ目と同じ緑にしない (同じ色だと同じ物に見える)。新しい色は作らず、
+     すでにある --fg-dim / --line を使う。 */
+@media (min-width: 760px) {
+  .prov-grid--featured { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+/* .prov-label.ok は (0,2,0) なので、こちらも2つ重ねないと色が勝てない。 */
+.prov-label.prov-label--sub { color: var(--fg-dim); background: none; border-color: var(--line); }
+.prov-label.prov-label--sub .dot { background: var(--fg-faint); box-shadow: none; animation: none; }

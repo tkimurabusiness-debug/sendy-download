@@ -23,7 +23,11 @@
    残ってしまう事故がない)。 */
 .svc-stage {
   position: relative;
-  height: 420vh;
+  /* 2026-08-03 竹蔵「長すぎ」。420vh (画面4.2枚) をアイコンが集まる演出だけに
+     使っていた。中の動きは js/services.js が scrub でスクロール量に比例させて
+     いるので、ここを短くすると同じ動きがそのまま速くなるだけ (何も消えない)。
+     420vh → 220vh。 */
+  height: 220vh;
   background: var(--ink);
 }
 

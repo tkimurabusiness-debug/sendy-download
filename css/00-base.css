@@ -357,8 +357,18 @@ a { color: inherit; text-decoration: none; }
 .reveal.in { opacity: 1; transform: none; }
 
 @media (max-width: 900px) {
-  .hero { padding: 120px 20px 70px; }
-  .hero-inner { grid-template-columns: 1fr; gap: 36px; }
+  /* **上の余白を二重に取らない。** ここの 120px と、上のほうにある
+     `.split .hero-inner { padding-top: 92px }` が足し算になって、
+     幅390 では上に 212px の何も無い帯ができていた (2026-08-03 実測)。
+     ヒーローの箇条書きを外して中身が短くなったぶん、その帯がさらに目立つ。
+     余白は中の .hero-inner だけが持つことにして、外側は 0 にする。 */
+  .hero { padding: 0; }
+  /* **狭い画面では上下に散らさない。** space-between は「画面の左半分をいっぱいに使う」
+     広い画面のための指定で、縦積みになった狭い画面では、余った高さのぶんだけ
+     ブランド名・本文・著作権表示の間に何も無い帯ができる (実測 200px)。
+     上から詰めて、間は gap で決める。 */
+  .hero-inner { grid-template-columns: 1fr; gap: 36px; justify-content: flex-start; height: auto; }
+  .hero-inner .copyright { margin-top: 8px; }
   .hero-shot-wrap { transform: none; }
   .cards, .privacy-grid { grid-template-columns: 1fr; }
   /* 狭い画面ではページ内の案内を隠す。案内が margin-left:auto を持っていたので、

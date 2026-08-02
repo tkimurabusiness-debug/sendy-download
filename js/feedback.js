@@ -1,4 +1,4 @@
-/* 機能の一覧と、声の受け口 (竹蔵 2026-08-01)。
+/* 声の受け口 (竹蔵 2026-08-01)。
  *
  *   「LP に実装済み機能、これから追加予定の機能 (ウェイトリスト的なボタンあると面白そう)
  *     希望機能とかバグ窓口とか設定したいかも」
@@ -7,47 +7,26 @@
  * 「会話はあなたの Mac から出ません 預かりもしません」と言っている以上、
  * 名前とメールを他社に預けると、その一文が信用されなくなる。
  *
- * **できていない物を「できます」と書かない。** 下の一覧は実物に合わせて手で保つ。
+ * 2026-08-03 に変えたこと:
+ *   機能の一覧を**この JavaScript で組み立てるのをやめ、index.html に直に書いた。**
+ *   理由は2つ。
+ *   ① 竹蔵「AIが見る用のところと人間が読む用のところは別にして欲しい」。
+ *      AI に読ませる事実の一覧は、JavaScript を動かさない取り込み機からも見えないと
+ *      意味がない。前の作りだと、そういう相手には**1件も見えていなかった**。
+ *   ② 人が読む言葉 (困りごとが消える言い方) と 機械が読む言葉 (短い事実) は
+ *      書き分けるべきもので、同じ配列から両方を出すと必ずどちらかが不自然になる。
+ *   ここに残すのは「押せるようにする」「送る」だけ。文言は持たない。
+ *   一覧と llms.txt がずれていないことは node scripts/check-page.mjs が確かめる。
  */
 (function () {
   'use strict';
   var EP = 'https://sendy-telemetry.t-kimura-business.workers.dev/v1/feedback';
 
-  /* 今できること。**実際に動く物だけ**を書く。 */
-  var DONE = [
-    ['メール', 'Gmail も Outlook も 何個でも'],
-    ['LINE', '仕事も個人も 1つの受信箱で'],
-    ['Messenger', 'Facebook のやり取り'],
-    ['Instagram', 'DM をまとめて'],
-    ['LinkedIn', '海外とのやり取り'],
-    ['Slack / Discord', 'そのままの画面で'],
-    ['予約して送る', '深夜に書いて 朝に届ける'],
-    ['AI の下書き', '返す文を考えてもらう'],
-    ['過去の履歴を復元', '暗号化された会話も取り込める'],
-    ['フォルダ', '仕事と友達を分ける'],
-    ['通知をまとめる', '切りたいものだけ切れる'],
-    ['AI から使える窓口', 'Claude などから会話を読める'],
-  ];
-
-  /* これから足すもの。**「いつ」は書かない** — 守れない約束をしない。 */
-  var NEXT = [
-    ['翻訳', '相手の言葉で読んで 日本語で返す'],
-    ['カカオトーク', '韓国の連絡先とつながる'],
-    ['Zalo', 'ベトナムの連絡先とつながる'],
-    ['iMessage / SMS', 'iPhone のやり取りも'],
-    ['Chatwork', '仕事の連絡をまとめる'],
-    ['X の DM', 'X のやり取りも'],
-    ['スマホ版', '外でも同じ受信箱'],
-    ['同じサービスで複数アカウント', '仕事用と個人用を並べて'],
-  ];
-
-  function li(pair, pickable) {
-    var el = document.createElement('li');
-    el.className = 'feat-item' + (pickable ? ' feat-item--pick' : '');
-    var h = document.createElement('b'); h.textContent = pair[0];
-    var p = document.createElement('span'); p.textContent = pair[1];
-    el.appendChild(h); el.appendChild(p);
-    if (pickable) {
+  /* 「これから足すもの」の札を押せるようにする。**中身は index.html 側にある。**
+     ここでは押した時の見た目と、選ばれたことの記録だけを足す。 */
+  (function makePickable() {
+    var items = document.querySelectorAll('#featNext .feat-item--pick');
+    Array.prototype.forEach.call(items, function (el) {
       el.setAttribute('role', 'button');
       el.setAttribute('tabindex', '0');
       el.setAttribute('aria-pressed', 'false');
@@ -60,36 +39,8 @@
       el.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
       });
-    }
-    return el;
-  }
-
-  function fill(id, rows, pickable) {
-    var ul = document.getElementById(id);
-    if (!ul) return;
-    rows.forEach(function (r) { ul.appendChild(li(r, pickable)); });
-  }
-  fill('featDone', DONE, false);
-  fill('featNext', NEXT, true);
-
-  /* ── AI に聞いてみる の節 (竹蔵 2026-08-03・SPEC P5-1 / P5-2) ──────────
-   *
-   * 事実の一覧は**上の DONE / NEXT をそのまま出す**。同じ事実を HTML にも手で書くと、
-   * 機能が増えた時に片方だけ古くなって、AI に嘘を読ませることになる。
-   * 隠す指定は一切かけない (人が読める形のまま置く)。 */
-  function fillFacts(id, rows) {
-    var dl = document.getElementById(id);
-    if (!dl) return;
-    rows.forEach(function (r) {
-      var row = document.createElement('div');
-      var dt = document.createElement('dt'); dt.textContent = r[0];
-      var dd = document.createElement('dd'); dd.textContent = r[1];
-      row.appendChild(dt); row.appendChild(dd);
-      dl.appendChild(row);
     });
-  }
-  fillFacts('aiFactsDone', DONE);
-  fillFacts('aiFactsNext', NEXT);
+  })();
 
   /** クリップボードへ入れる。
    *  navigator.clipboard は安全な接続 (https / 127.0.0.1) でしか使えないので、

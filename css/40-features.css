@@ -136,6 +136,81 @@
   pointer-events: none;
 }
 
+/* ── AI に聞いてみる (竹蔵 2026-08-03・SPEC P5-1 / P5-2) ─────────────
+ *
+ * **見えなくする指定 (display の none / visibility の hidden / 文字の大きさ 0) を
+ * 1つも使わない。** 機械にだけ見せると、検索エンジンから「人と機械に違う物を
+ * 見せている」と判定される危険がある。人が読める大きさのまま置く。
+ *
+ * 新しい色も角丸も影も作らない。上の .feat-* と同じ値だけを使う
+ * (--line / --bg-soft / --radius / --font-head / --fg-dim)。 */
+.feat-ai-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+/* コピーされる文そのもの。長い住所で横にはみ出さないよう、単語の途中でも折る。 */
+.feat-ai-prompt {
+  flex: 1 1 320px;
+  min-width: 0;
+  margin: 0;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 12px;          /* .feat-input と同じ */
+  color: var(--fg-dim);
+  font-size: 13.5px;
+  line-height: 1.6;
+  padding: 12px 14px;
+  overflow-wrap: anywhere;
+  /* 行の長さをそろえる。素のままだと最後の行に「い」の1文字だけが落ちる (実測)。
+     対応していない browser では素直に無視されるだけで、崩れはしない。 */
+  text-wrap: balance;
+}
+.feat-ai-card {
+  margin-top: clamp(28px, 3.5vw, 44px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+  padding: clamp(20px, 2.6vw, 30px);
+}
+/* 色は指定しない。body の --fg (白) をそのまま継ぐ。 */
+.feat-ai-brief {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.9;
+}
+.feat-ai-card h3 {
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: clamp(24px, 3vw, 34px) 0 12px;
+}
+/* 名前と説明の対。作りは .company-facts をそのまま使う (機械が読み取りやすい dl)。 */
+.feat-ai-facts { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.feat-ai-facts > div {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+/* 210px は「同じサービスで複数アカウント」が1行に収まる幅。
+   これより狭いと最後の1文字だけが次の行に落ちる。 */
+.feat-ai-facts dt { flex: 0 0 210px; font-size: 13.5px; font-weight: 600; }
+.feat-ai-facts dd { flex: 1 1 240px; margin: 0; font-size: 13.5px; color: var(--fg-dim); }
+
+@media (max-width: 700px) {
+  /* 幅が狭い時は名前と説明を上下に並べる (210px の欄を残すと説明が細くなりすぎる)。
+     **縦並びにしたら flex-basis を必ず戻す。** 縦並びでは flex-basis が
+     「幅」ではなく「高さ」になるので、240px のままだと1行ごとに 240px の
+     空白が空く (実測。390px 幅で行と行の間が指2本分あいていた)。 */
+  .feat-ai-facts > div { flex-direction: column; gap: 3px; }
+  .feat-ai-facts dt { flex: none; }
+  .feat-ai-facts dd { flex: none; }
+}
+
 /* ── 機種ごとのダウンロードボタン (竹蔵 2026-08-01) ───────────────
  *
  *   「ちっちゃくしないで apple シリコン版とちゃんと同じ感じのボタンにして欲しいかな

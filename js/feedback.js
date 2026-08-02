@@ -72,6 +72,66 @@
   fill('featDone', DONE, false);
   fill('featNext', NEXT, true);
 
+  /* ── AI に聞いてみる の節 (竹蔵 2026-08-03・SPEC P5-1 / P5-2) ──────────
+   *
+   * 事実の一覧は**上の DONE / NEXT をそのまま出す**。同じ事実を HTML にも手で書くと、
+   * 機能が増えた時に片方だけ古くなって、AI に嘘を読ませることになる。
+   * 隠す指定は一切かけない (人が読める形のまま置く)。 */
+  function fillFacts(id, rows) {
+    var dl = document.getElementById(id);
+    if (!dl) return;
+    rows.forEach(function (r) {
+      var row = document.createElement('div');
+      var dt = document.createElement('dt'); dt.textContent = r[0];
+      var dd = document.createElement('dd'); dd.textContent = r[1];
+      row.appendChild(dt); row.appendChild(dd);
+      dl.appendChild(row);
+    });
+  }
+  fillFacts('aiFactsDone', DONE);
+  fillFacts('aiFactsNext', NEXT);
+
+  /** クリップボードへ入れる。
+   *  navigator.clipboard は安全な接続 (https / 127.0.0.1) でしか使えないので、
+   *  使えない時のために古いやり方 (選択して copy) を残す。 */
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      /* 画面の外に置く。押した時に画面が飛ばないよう position:fixed にする。 */
+      ta.style.position = 'fixed';
+      ta.style.top = '0';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      if (ok) resolve(); else reject(new Error('copy failed'));
+    });
+  }
+
+  var aiBtn = document.getElementById('aiCopyBtn');
+  var aiPrompt = document.getElementById('aiPrompt');
+  var aiNote = document.getElementById('aiCopyNote');
+  var aiTimer = null;
+  if (aiBtn && aiPrompt && aiNote) aiBtn.addEventListener('click', function () {
+    /* **画面に出ている文をそのまま**入れる。JS 側にもう1本文を持つと、
+       見えている物と入る物が食い違う。 */
+    var text = aiPrompt.textContent.trim();
+    copyText(text).then(function () {
+      aiNote.textContent = 'コピーしました';
+      if (aiTimer) clearTimeout(aiTimer);
+      aiTimer = setTimeout(function () { aiNote.textContent = ''; }, 2000);
+    }).catch(function () {
+      aiNote.textContent = 'コピーできませんでした 上の文を選んでコピーしてください';
+    });
+  });
+
   /** 選ばれている「待っているもの」を集める。 */
   function picked() {
     var on = document.querySelectorAll('#featNext .feat-item[aria-pressed="true"] b');

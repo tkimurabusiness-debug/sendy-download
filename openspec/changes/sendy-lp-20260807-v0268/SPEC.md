@@ -9,7 +9,7 @@
 
 | # | 要件 | 受入条件 (機械または目視で確かめられる形) |
 |---|---|---|
-| R1 | ページに書いてある版を 0.2.68 にする | `rg -c '0\.2\.51' index.html llms.txt` が 0 件。`rg -c '0\.2\.68'` が index.html 2件 / llms.txt 1件 |
+| R1 | ページに書いてある版を 0.2.68 にする | `rg -c '0\.2\.51' index.html llms.txt` が 0 件。`rg -c '0\.2\.68'` が index.html 5件 / llms.txt 2件 (版の表示2か所 + 新しい節の見出し3か所) |
 | R2 | 0.2.68 で変わった6件を人が読める形で載せる | `#whats-new` の `.feat-item` が 6 件 |
 | R3 | 同じ6件を AI 向けの節にも載せる | `#for-ai` の `<dt>` が 44 → 50 件。`node scripts/check-page.mjs` が llms.txt との一致を確認 |
 | R4 | 見出し・ボタンの文言に「、」「。」を入れない | `node scripts/check-page.mjs` が 0 件 |

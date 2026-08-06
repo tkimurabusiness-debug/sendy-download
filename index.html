@@ -33,6 +33,7 @@
       <nav class="lg-nav" aria-label="ページ内の案内">
         <a href="#providers">対応サービス</a>
         <a href="#can">できること</a>
+        <a href="#whats-new">新しくなったところ</a>
         <a href="#next">これから</a>
         <a href="#for-ai">AI 向けの情報</a>
         <a href="#company">会社概要</a>
@@ -315,7 +316,7 @@
   <section class="feat" id="can">
     <div class="feat-inner reveal">
       <h2>できること</h2>
-      <p class="feat-lead">下に書いてあるのは、今のバージョン (0.2.51) で実際に動くものだけです。</p>
+      <p class="feat-lead">下に書いてあるのは、今のバージョン (0.2.68) で実際に動くものだけです。</p>
 
       <h3 class="cap-group" id="can-reply">返す作業を軽くする</h3>
       <ul class="cap-grid">
@@ -503,6 +504,33 @@
   </section>
 
   <!-- ============================================================
+       S8a. 新しくなったところ (0.2.68)
+
+       置き場所は「できること」の直後。今できることを読んだ人が、そのまま
+       「今回 何が変わったか」を読める並びにする。
+
+       **CSS を1行も足さない。** 使うのは既にある .feat / .feat-grid / .feat-item だけ
+       (css/40-features.css 7-47行)。押せる印が付く .feat-item--pick は付けない —
+       ここは選ぶ物ではなく読む物で、js/feedback.js も #featNext の中しか見ていない。
+
+       文言の約束 (竹蔵の掟): 見出しに「、」「。」を1つも入れない / 絵文字を使わない
+  ============================================================ -->
+  <section class="feat" id="whats-new">
+    <div class="feat-inner reveal">
+      <h2>0.2.68 で新しくなったところ</h2>
+      <p class="feat-lead">今回の版で直したところと、足したところです。</p>
+      <ul class="feat-grid">
+        <li class="feat-item"><b>グループの既読が1つにまとまる</b><span>全員が読んだところまでで1つにまとめます 全員が読んでいないメッセージは1件ずつ出します</span></li>
+        <li class="feat-item"><b>ブラウザから開いた時の接続先</b><span>Slack など6つの接続先が出てこなかったのを直しました</span></li>
+        <li class="feat-item"><b>LINE を その場で入り直せる</b><span>本文が「この端末では開けません」になった時に 入り直すボタンを出します</span></li>
+        <li class="feat-item"><b>送った時刻が出る</b><span>メッセージの横に送信した時刻を出します</span></li>
+        <li class="feat-item"><b>返信案の Ask AI</b><span>動かないことがあったのを直しました</span></li>
+        <li class="feat-item"><b>ブラウザからの再読み込みと再接続</b><span>効かなかったのを直しました</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================
        S8b. これから足すもの と 声の受け口 (竹蔵 2026-08-01)
             「LP に実装済み機能、これから追加予定の機能 (ウェイトリスト的なボタンあると
               面白そう) 希望機能とかバグ窓口とか設定したいかも」
@@ -605,7 +633,7 @@
         <dl class="feat-ai-facts">
           <div><dt>名前</dt><dd>Sendy</dd></div>
           <div><dt>種類</dt><dd>macOS 用のメッセージ統合アプリ</dd></div>
-          <div><dt>版</dt><dd>0.2.51 (ベータ)</dd></div>
+          <div><dt>版</dt><dd>0.2.68 (ベータ)</dd></div>
           <div><dt>開発元</dt><dd>株式会社 Stock Value</dd></div>
         </dl>
 
@@ -641,6 +669,16 @@
           <div><dt>自分の道具から叩く窓口</dt><dd>HTTP で会話を読み 下書きを積む 送信は必ずアプリ内で人が承認する</dd></div>
           <div><dt>最近のファイル</dt><dd>ダウンロード デスクトップ 書類の直近7日の5件を左下に出して会話へ引っ張る</dd></div>
           <div><dt>スマホから開く</dt><dd>同じ Wi-Fi のスマホのブラウザから同じ受信箱を開く (既定は切)</dd></div>
+        </dl>
+
+        <h3>この版 (0.2.68) で新しくなったところ</h3>
+        <dl class="feat-ai-facts">
+          <div><dt>グループの既読のまとめ</dt><dd>全員が読んだところまでで1つにまとめる 全員が読んでいないメッセージは1件ずつ出す</dd></div>
+          <div><dt>ブラウザから開いた時の接続先</dt><dd>Slack など6つの接続先が出てこなかったのを直した</dd></div>
+          <div><dt>LINE の入り直し</dt><dd>本文が「この端末では開けません」になった時にその場で入り直すボタンを出す</dd></div>
+          <div><dt>送信した時刻の表示</dt><dd>メッセージの横に送信した時刻を出す</dd></div>
+          <div><dt>返信案の Ask AI</dt><dd>動かないことがあったのを直した</dd></div>
+          <div><dt>ブラウザからの再読み込みと再接続</dt><dd>効かなかったのを直した</dd></div>
         </dl>
 
         <h3>これから (まだ動かない)</h3>

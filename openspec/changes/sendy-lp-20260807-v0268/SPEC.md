@@ -20,12 +20,15 @@
 ## 2. 調査 (実測で裏取り)
 
 - `/Users/kimuratakezou/uicos/app-messenger/package.json` の version = **0.2.68**
-- `/Users/kimuratakezou/uicos/app-messenger/release/` に `Sendy-0.2.68-arm64.dmg` `Sendy-0.2.68.dmg`
-  `Sendy-0.2.68-arm64-mac.zip` `Sendy-0.2.68-mac.zip` が実在する。
-  **Windows 用の `Sendy-Setup-0.2.68.exe` は存在しない** (0.2.67 が最後)
+- `/Users/kimuratakezou/uicos/app-messenger/release/` に Mac 用4本と Windows 用2本が実在する
+  (`Sendy-0.2.68-arm64.dmg` `Sendy-0.2.68.dmg` `Sendy-0.2.68-arm64-mac.zip` `Sendy-0.2.68-mac.zip`
+  `Sendy-Setup-0.2.68.exe` `Sendy-0.2.68-win.zip`)
 - `js/download.js` は落とすボタンの行き先を GitHub の「最新のリリース」から毎回引いている。
   ページに版を焼き込んでいない。よって**行き先を 0.2.68 にするにはリリースの公開が要る**
-- GitHub の最新リリースは **v0.2.66** (2026-08-05 公開)。v0.2.67 と v0.2.68 は未公開
+- GitHub の最新リリース (2026-08-07 01:05 に確認) = **v0.2.68** (公開時刻 2026-08-06T16:00:33Z)。
+  Mac 用と Windows 用の6本が全部上がっている。
+  **この作業の途中で竹蔵か別の作業者が公開した** (作業開始時点では v0.2.66 だった)。
+  この作業では GitHub へ1バイトも上げていない
 
 ## 3. 実装プラン (どのファイルに何を書くか)
 
@@ -87,9 +90,15 @@
 5. `git diff --stat css/` が 0 行 (CSS を1行も足していないことの証拠)
 6. `/Users/kimuratakezou/uicos/app-messenger` に `git status` の変化が 1 件も無い
 
-## 6. 竹蔵の判断が要る点 (このセッションでは実行しない)
+## 6. 竹蔵の判断が要る点
 
-**落とすボタンの行き先はまだ 0.2.66 のまま**。ページの文字を直しても変わらない。
-`js/download.js` が GitHub の「最新のリリース」を引いており、そこに 0.2.68 が上がっていないため。
-0.2.68 を配るには `Sendy-0.2.68-arm64.dmg` などを GitHub のリリースへ上げる操作が要る。
-これは対外公開なので竹蔵の承認を待つ。
+落とすボタンの行き先は**実ブラウザで 0.2.68 を指していることを確かめた**。
+GitHub のリリース v0.2.68 が公開済みだったため (公開したのはこの作業ではない)。
+
+残っている判断は1つだけ。**このページの変更を公開するかどうか**。
+`git push` はしていない。押すと GitHub Pages が入れ替わり、来た人の目に触れる。
+
+なお `/Users/kimuratakezou/uicos/app-messenger/openspec/changes/sendy-20260806-connection-rebuild/SPEC.md`
+の45行目には「竹蔵1人にだけ配る。ベータ10人へは広げない。」と書いてある。
+一方で GitHub のリリース v0.2.68 は誰でも落とせる形で公開されている。
+**この2つは食い違っている。** どちらが今の方針かを竹蔵に確かめてから push する。

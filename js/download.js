@@ -12,7 +12,8 @@
 (function () {
   'use strict';
   var API = 'https://api.github.com/repos/tkimurabusiness-debug/sendy-download/releases/latest';
-  var FALLBACK = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/latest';
+  var ARM_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-arm64.dmg';
+  var INTEL_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-intel.dmg';
 
   /* この機械が何かを見分ける。
      userAgent の "Intel Mac OS X" は M シリーズでもそう名乗るので、Mac の中の機種判別には使えない。
@@ -57,11 +58,11 @@
    *     intel 版も、あとちゃんとそれぞれ分かりやすくしてね」)。
    * **資産が無ければ丸ごと消す** (押して 404 にしない)。
    * `mine` が真の1つだけ色を付ける — どれを押せばよいかを迷わせない。 */
-  function setPick(id, asset, mine) {
+  function setPick(id, href, asset, mine) {
     var el = document.getElementById(id);
     if (!el) return;
     if (!asset) { el.hidden = true; return; }
-    el.setAttribute('href', asset.browser_download_url);
+    el.setAttribute('href', href);
     el.classList.toggle('is-mine', !!mine);
     var sub = el.querySelector('.dl-pick-sub');
     if (sub) {
@@ -71,36 +72,42 @@
     el.hidden = false;
   }
 
-  setAll(FALLBACK);   // 取得に失敗しても、リリース一覧までは必ず飛べるようにしておく
+  setAll(isAppleSilicon() === false ? INTEL_DMG : ARM_DMG);
 
   fetch(API, { headers: { Accept: 'application/vnd.github+json' } })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (rel) {
       if (!rel || !rel.assets) return;
-      var dmgs = rel.assets.filter(function (a) { return /\.dmg$/.test(a.name); });
-      var arm = dmgs.filter(function (a) { return /arm64/.test(a.name); })[0];
-      var intel = dmgs.filter(function (a) { return !/arm64/.test(a.name); })[0];
+      var arm = rel.assets.filter(function (a) { return a.name === 'Sendy-arm64.dmg'; })[0];
+      var intel = rel.assets.filter(function (a) { return a.name === 'Sendy-intel.dmg'; })[0];
       var win = rel.assets.filter(function (a) { return /\.exe$/.test(a.name); })[0];
 
-      /* 主のボタンは、その機械に合う物を渡す。 */
+      /* 主のボタンは、その機械に合う固定名DMGを渡す。 */
       var pick = null;
+      var pickHref = '';
       var suffix = '';
       if (isWindows()) {
-        pick = win; suffix = ' · Windows（試験中）';
+        pick = win;
+        pickHref = win ? win.browser_download_url : '';
+        suffix = ' · Windows（試験中）';
+      } else if (isAppleSilicon() === false) {
+        pick = intel;
+        pickHref = INTEL_DMG;
       } else {
-        pick = (isAppleSilicon() === false ? intel : arm) || dmgs[0];
+        pick = arm;
+        pickHref = ARM_DMG;
       }
-      if (pick) {
-        setAll(pick.browser_download_url, Math.round(pick.size / 1048576), rel.tag_name + suffix);
+      if (pick && pickHref) {
+        setAll(pickHref, Math.round(pick.size / 1048576), rel.tag_name + suffix);
       }
 
       /* 3つとも同じ大きさで出す。合う物だけ色を付ける。 */
       // **主のボタンが渡す物は、下に出さない** (同じ物が2つ並ぶと迷う)。
       // 下に出るのは「自分の機械ではない方」だけ。ただし**大きさは主のボタンと同じ**にする
       // (竹蔵「ちっちゃくしないで apple シリコン版とちゃんと同じ感じのボタンに」)。
-      setPick('dl-arm', pick === arm ? null : arm, false);
-      setPick('dl-intel', pick === intel ? null : intel, false);
-      setPick('dl-win', pick === win ? null : win, false);
+      setPick('dl-arm', ARM_DMG, pick === arm ? null : arm, false);
+      setPick('dl-intel', INTEL_DMG, pick === intel ? null : intel, false);
+      setPick('dl-win', win ? win.browser_download_url : '', pick === win ? null : win, false);
       // 並ぶ物が1つも無い時は、見出しも消す (「こちら」と言って何も無いのを防ぐ)。
       var lead = document.querySelector('.dl-picks-lead');
       var shown = document.querySelectorAll('.dl-pick:not([hidden])').length;
@@ -109,5 +116,5 @@
       var note = document.getElementById('dl-win-note');
       if (note) note.hidden = !win;
     })
-    .catch(function () { /* 取得できなければ FALLBACK のまま */ });
+    .catch(function () { /* 初期状態のDMG直リンクを保つ。 */ });
 })();

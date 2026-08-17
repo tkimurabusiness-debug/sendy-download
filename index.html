@@ -76,10 +76,8 @@
         <h2>ダウンロード</h2>
         <p class="dl-sub">macOS 版（Apple Silicon）</p>
 
-        <!-- 素の行き先は「最新のリリース一覧」にする。版を焼き込むと、次に版が上がった瞬間に
-             404 になる (js/download.js が動く前・動かなかった時に押すと落ちる)。
-             実際の .dmg への直リンクは js/download.js が読み込み時に入れ替える。 -->
-        <a id="download-btn" class="dl-btn" href="https://github.com/tkimurabusiness-debug/sendy-download/releases/latest" rel="noopener">
+        <!-- 読み込み直後から固定名のDMGへ進む。版番号を焼き込まず、公開済みの最新DMGを受け取る。 -->
+        <a id="download-btn" class="dl-btn" href="https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-arm64.dmg" rel="noopener">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg>
           <span>Sendy をダウンロード</span>
         </a>
@@ -316,7 +314,7 @@
   <section class="feat" id="can">
     <div class="feat-inner reveal">
       <h2>できること</h2>
-      <p class="feat-lead">下に書いてあるのは、今のバージョン (0.2.72) で実際に動くものだけです。</p>
+      <p class="feat-lead">下に書いてあるのは、今のバージョン (0.2.73) で実際に動くものだけです。</p>
 
       <h3 class="cap-group" id="can-reply">返す作業を軽くする</h3>
       <ul class="cap-grid">
@@ -504,7 +502,7 @@
   </section>
 
   <!-- ============================================================
-       S8a. 新しくなったところ (0.2.72)
+       S8a. 新しくなったところ (0.2.73)
 
        置き場所は「できること」の直後。今できることを読んだ人が、そのまま
        「今回 何が変わったか」を読める並びにする。
@@ -517,15 +515,15 @@
   ============================================================ -->
   <section class="feat" id="whats-new">
     <div class="feat-inner reveal">
-      <h2>0.2.72 で新しくなったところ</h2>
+      <h2>0.2.73 で新しくなったところ</h2>
       <p class="feat-lead">今回の版で直したところと、足したところです。</p>
       <ul class="feat-grid">
-        <li class="feat-item"><b>チャット一覧がすぐ変わる</b><span>新しいメッセージが届いた時 一覧の並びと本文がすぐ変わります 今までは取り直しが終わるまで止まっていました</span></li>
-        <li class="feat-item"><b>LINE が繋がらなくなる問題を直しました</b><span>保存した合言葉を読めず 起動しても繋がらないことがありました</span></li>
-        <li class="feat-item"><b>Discord と Chatwork の画面</b><span>押すと受信箱へ戻ってしまうのを直しました</span></li>
-        <li class="feat-item"><b>「入り直しが必要」が勝手に出る問題を直しました</b><span>確かめられなかっただけの時に 合言葉が切れた扱いにしていました</span></li>
-        <li class="feat-item"><b>動画の1コマ目が出る</b><span>真っ暗な四角のかわりに 1コマ目を出します 読み込みも速くなります</span></li>
-        <li class="feat-item"><b>長い引用と横のずれを直しました</b><span>引用が見切れる問題と 画面が横に動いてしまう問題です</span></li>
+        <li class="feat-item"><b>写真や書類の読み込みが速い</b><span>30MB の書類で約4倍になりました 一度開いたものは次から取り直しません</span></li>
+        <li class="feat-item"><b>まとめて届いた写真をまとめて保存</b><span>写真を開くと「まとめて保存」が出ます 1枚ずつ開き直す必要がなくなりました</span></li>
+        <li class="feat-item"><b>ダウンロード中が見て分かる</b><span>押したボタンが丸い印になり 何枚目まで終わったかも出ます</span></li>
+        <li class="feat-item"><b>相手の表示名を自分で変えられる</b><span>チャット設定のペンから変えられます 付けた名前でも元の名前でも探せます</span></li>
+        <li class="feat-item"><b>新しく届いた相手の名前が出る</b><span>「名前未取得の相手」のまま残らなくなりました</span></li>
+        <li class="feat-item"><b>一度 取れなかったものを取り直す</b><span>写真も名前もリンクの下見も もう一度 取りに行きます</span></li>
       </ul>
     </div>
   </section>
@@ -633,7 +631,7 @@
         <dl class="feat-ai-facts">
           <div><dt>名前</dt><dd>Sendy</dd></div>
           <div><dt>種類</dt><dd>macOS 用のメッセージ統合アプリ</dd></div>
-          <div><dt>版</dt><dd>0.2.72 (ベータ)</dd></div>
+          <div><dt>版</dt><dd>0.2.73 (ベータ)</dd></div>
           <div><dt>開発元</dt><dd>株式会社 Stock Value</dd></div>
         </dl>
 
@@ -671,14 +669,14 @@
           <div><dt>スマホから開く</dt><dd>同じ Wi-Fi のスマホのブラウザから同じ受信箱を開く (既定は切)</dd></div>
         </dl>
 
-        <h3>この版 (0.2.72) で新しくなったところ</h3>
+        <h3>この版 (0.2.73) で新しくなったところ</h3>
         <dl class="feat-ai-facts">
-          <div><dt>チャット一覧がすぐ変わる</dt><dd>新しいメッセージが届いた時に一覧の並びと本文がすぐ変わる 今までは取り直しが終わるまで止まっていた</dd></div>
-          <div><dt>LINE が繋がらなくなる問題</dt><dd>保存した合言葉を読めず 起動しても繋がらないことがあったのを直した</dd></div>
-          <div><dt>Discord と Chatwork の画面</dt><dd>押すと受信箱へ戻ってしまうのを直した</dd></div>
-          <div><dt>「入り直しが必要」が勝手に出る</dt><dd>確かめられなかっただけの時に合言葉が切れた扱いにしていたのを直した</dd></div>
-          <div><dt>動画の1コマ目</dt><dd>真っ暗な四角のかわりに1コマ目を出す 読み込みも速くなる</dd></div>
-          <div><dt>長い引用と横のずれ</dt><dd>引用が見切れる問題と画面が横に動いてしまう問題を直した</dd></div>
+          <div><dt>写真や書類の読み込みが速い</dt><dd>30MB の書類で約4倍 一度開いたものは次から取り直さない</dd></div>
+          <div><dt>まとめて届いた写真をまとめて保存</dt><dd>写真を開くと「まとめて保存」が出る 1枚ずつ開き直さなくてよい</dd></div>
+          <div><dt>ダウンロード中が見て分かる</dt><dd>押したボタンが丸い印になり 何枚目まで終わったかも出る</dd></div>
+          <div><dt>相手の表示名を自分で変えられる</dt><dd>チャット設定のペンから変えられる 付けた名前でも元の名前でも探せる</dd></div>
+          <div><dt>新しく届いた相手の名前が出る</dt><dd>「名前未取得の相手」のまま残らない</dd></div>
+          <div><dt>一度 取れなかったものを取り直す</dt><dd>写真も名前もリンクの下見も もう一度 取りに行く</dd></div>
         </dl>
 
         <h3>これから (まだ動かない)</h3>
@@ -769,7 +767,7 @@
         <!-- 竹蔵採用 C-3 (2026-07-25): ダウンロードは独立した段をやめ、1段目の4列目に入れる -->
         <div class="footer-col">
           <div class="footer-col-title">ダウンロード</div>
-          <a class="footer-dl-btn footer-dl-btn--col" href="https://github.com/tkimurabusiness-debug/sendy-download/releases/latest" rel="noopener">
+          <a class="footer-dl-btn footer-dl-btn--col" href="https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-arm64.dmg" rel="noopener">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg>
             <span>Sendy をダウンロード</span>
           </a>

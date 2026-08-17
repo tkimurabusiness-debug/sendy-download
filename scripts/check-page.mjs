@@ -112,6 +112,37 @@ const forAiBlock = aiSection.slice(0, aiSection.indexOf('</section>'));
 if (hideRe.test(forAiBlock)) fail('AI 向けの節に隠す指定がある');
 else ok('AI 向けの節を隠していない');
 
+/* ── ⑤ ダウンロードがGitHubのリリース画面を開かないこと ───── */
+const ARM_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-arm64.dmg';
+const INTEL_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-intel.dmg';
+const downloadJs = readFileSync(join(ROOT, 'js', 'download.js'), 'utf8');
+const mainDownload = body.match(/<a\b[^>]*\bid="download-btn"[^>]*\bhref="([^"]+)"/);
+const footerDownload = body.match(/<a\b[^>]*\bclass="[^"]*\bfooter-dl-btn\b[^"]*"[^>]*\bhref="([^"]+)"/);
+const initialDownloads = [mainDownload?.[1], footerDownload?.[1]].filter(Boolean);
+
+if (initialDownloads.length !== 2) {
+  fail('主ボタンとフッターボタンの初期リンクを2件読めない');
+} else if (initialDownloads.some((href) => href !== ARM_DMG)) {
+  fail('初期ダウンロードリンクがApple Silicon用DMGの直リンクではない');
+} else {
+  ok('主ボタンとフッターボタンは最初からDMGの直リンク');
+}
+
+if (!downloadJs.includes(ARM_DMG) || !downloadJs.includes(INTEL_DMG)) {
+  fail('JavaScriptにCPU別の固定名DMGリンクがそろっていない');
+} else {
+  ok('JavaScriptにApple Silicon用とIntel用の固定名DMGリンクがある');
+}
+
+const releasePageUrls = `${body}\n${downloadJs}`.match(
+  /https:\/\/github\.com\/tkimurabusiness-debug\/sendy-download\/releases\/latest(?!\/download\/)/g,
+) ?? [];
+if (releasePageUrls.length) {
+  fail(`GitHubのリリース画面を開くURLが残っている (${releasePageUrls.length} 件)`);
+} else {
+  ok('GitHubのリリース画面を開く予備リンクがない');
+}
+
 console.log('');
 if (ng) { console.log(`失敗 ${ng} 件`); process.exit(1); }
 console.log('すべて通りました');

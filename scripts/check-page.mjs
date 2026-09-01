@@ -5,8 +5,6 @@
  *      竹蔵に何度も同じ指摘をさせている掟。目視では必ず漏れる。
  *      本文 (段落) は対象外 (句読点を使ってよい)。
  *   ② 絵文字が1つも無いこと (竹蔵「絶対やだ」)
- *   ③ AI 向けの節と llms.txt がずれていないこと
- *      llms.txt を事実の正本にし、ページ側に載せた項目は説明まで一致させる。
  *
  * 使い方: node scripts/check-page.mjs
  * 依存パッケージは足さない (素の node だけで動く)。
@@ -68,14 +66,12 @@ for (const file of ['index.html', 'llms.txt']) {
   else ok(`${file} に絵文字なし`);
 }
 
-/* ── AI 向けの節を確認する ───────────────────────────────── */
-const aiStart = body.indexOf('id="for-ai"');
-if (aiStart < 0) fail('AI 向けの節 (id="for-ai") が無い');
-
 /* ── ④ AI 向けの節を隠していないこと ───────────────────────
  * 機械にだけ見せると、検索エンジンから「人と機械に違う物を見せている」と
  * 判定される危険がある。隠す指定が入り込んでいないか見る。 */
 const hideRe = /(display\s*:\s*none|visibility\s*:\s*hidden|font-size\s*:\s*0|aria-hidden="true")/;
+const aiStart = body.indexOf('id="for-ai"');
+if (aiStart < 0) fail('AI 向けの節 (id="for-ai") が無い');
 if (hideRe.test(body.slice(aiStart, body.indexOf('</section>', aiStart)))) fail('AI 向けの節に隠す指定がある');
 else ok('AI 向けの節を隠していない');
 

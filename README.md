@@ -30,11 +30,7 @@ Messenger・LINE・Instagram・LinkedIn・Chatwork・メールを1つの受信�
 
 ## 対応している連絡先
 
-**動作確認が取れているもの**
-
-| Messenger | LINE | Instagram | LinkedIn | Chatwork | Gmail / Outlook / iCloud |
-|:---:|:---:|:---:|:---:|:---:|:---:|
-| ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+対応先と動作確認の状況は [AI向けの確認済み事実](llms.txt) にまとめています。
 
 Slack と Discord は Sendy の中で各サービスの元の画面を開きます。
 

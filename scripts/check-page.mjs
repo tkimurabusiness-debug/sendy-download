@@ -6,7 +6,7 @@
  *      本文 (段落) は対象外 (句読点を使ってよい)。
  *   ② 絵文字が1つも無いこと (竹蔵「絶対やだ」)
  *   ③ AI 向けの節と llms.txt がずれていないこと
- *      ずれると AI が古いほうを読んで、できない機能を「できます」と言う。
+ *      llms.txt を事実の正本にし、ページ側に載せた項目は説明まで一致させる。
  *
  * 使い方: node scripts/check-page.mjs
  * 依存パッケージは足さない (素の node だけで動く)。
@@ -91,17 +91,15 @@ for (const m of llmsFacts.matchAll(/^- ([^:\n]+): (.+)$/gm)) {
 const dts = [...pageFacts.keys()];
 const llmsKeys = [...llmsMap.keys()];
 const missingInLlms = dts.filter((d) => !llmsMap.has(d));
-const missingInPage = llmsKeys.filter((k) => !pageFacts.has(k));
 const valueMismatch = dts
   .filter((d) => llmsMap.has(d) && llmsMap.get(d) !== pageFacts.get(d))
   .map((d) => `${d}\n      ページ : ${pageFacts.get(d)}\n      llms.txt: ${llmsMap.get(d)}`);
 
 if (dts.length === 0) fail('AI 向けの節に <dt> と <dd> の対が1件も無い');
 if (missingInLlms.length) missingInLlms.forEach((d) => fail(`llms.txt に無い項目: ${d}`));
-if (missingInPage.length) missingInPage.forEach((k) => fail(`ページに無い項目: ${k}`));
 if (valueMismatch.length) valueMismatch.forEach((v) => fail(`説明がずれている項目: ${v}`));
-if (!missingInLlms.length && !missingInPage.length && !valueMismatch.length && dts.length) {
-  ok(`AI 向けの節と llms.txt が一致 (${dts.length} 項目・名前と説明の両方)`);
+if (!missingInLlms.length && !valueMismatch.length && dts.length) {
+  ok(`AI 向けの節は llms.txt の正本と一致 (${dts.length} 項目・名前と説明の両方)`);
 }
 
 /* ── ④ AI 向けの節を隠していないこと ───────────────────────

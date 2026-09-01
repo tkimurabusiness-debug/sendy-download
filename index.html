@@ -314,7 +314,7 @@
   <section class="feat" id="can">
     <div class="feat-inner reveal">
       <h2>できること</h2>
-      <p class="feat-lead">下に書いてあるのは、今のバージョン (0.2.77) で実際に動くものだけです。</p>
+      <p class="feat-lead">下に書いてあるのは、今のバージョン (0.2.93) で実際に動くものだけです。</p>
 
       <h3 class="cap-group" id="can-reply">返す作業を軽くする</h3>
       <ul class="cap-grid">
@@ -395,9 +395,9 @@
         <li class="cap-card">
           <p class="cap-kicker">同じサービスで複数</p>
           <h4 class="cap-title">仕事用と個人用を並べて置ける</h4>
-          <p class="cap-desc">LINE とメールは、同じサービスのアカウントを複数つなげます。切り替えずに1つの一覧で読めます。</p>
+          <p class="cap-desc">LINE・Instagram・メールは、同じサービスのアカウントを複数つなげます。同じサービスのアイコンを増やさず、アカウントだけを切り替えられます。</p>
           <details class="cap-more"><summary>もう少し詳しく</summary>
-            <p>複数持てるのは今のところ LINE とメールだけです。Messenger・Instagram・LinkedIn・Chatwork は1つずつです。</p>
+            <p>複数持てるのは今のところ LINE・Instagram・メールです。Messenger・LinkedIn・Chatwork は1つずつです。</p>
           </details>
         </li>
         <li class="cap-card">
@@ -502,7 +502,7 @@
   </section>
 
   <!-- ============================================================
-       S8a. 新しくなったところ (0.2.77)
+       S8a. 新しくなったところ (0.2.93)
 
        置き場所は「できること」の直後。今できることを読んだ人が、そのまま
        「今回 何が変わったか」を読める並びにする。
@@ -515,15 +515,15 @@
   ============================================================ -->
   <section class="feat" id="whats-new">
     <div class="feat-inner reveal">
-      <h2>0.2.77 で新しくなったところ</h2>
+      <h2>0.2.93 で新しくなったところ</h2>
       <p class="feat-lead">今回の版で直したところと、足したところです。</p>
       <ul class="feat-grid">
-        <li class="feat-item"><b>LINE の履歴が読めない時に取り直せる</b><span>前の鍵で閉じられた会話に「履歴を取り直す」が出ます 押すと読めるようになった件数が出ます 何も消しません</span></li>
-        <li class="feat-item"><b>LINE に入り直した時の鍵の受け渡しを記録</b><span>スマホから鍵を受け取れたかが分かるようになりました 受け取れた時は過去の履歴も読み直します</span></li>
-        <li class="feat-item"><b>見ていない Discord や Slack が描くのをやめる</b><span>開いていない画面は隠れている間 描画を止めます 通知は今までどおり届きます</span></li>
-        <li class="feat-item"><b>Chatwork や Slack の未読の印が出る</b><span>未読はあるが件数が分からない時に印が消えていた不具合を直しました</span></li>
-        <li class="feat-item"><b>中身の無いお知らせで通知が鳴らない</b><span>LINE の「◯◯さんのお知らせ」だけの知らせは鳴らなくなりました 画面には今までどおり出ます</span></li>
-        <li class="feat-item"><b>AI の返信案が途中で諦めない</b><span>待つ時間が短すぎて 決まり文句に落ちていた不具合を直しました</span></li>
+        <li class="feat-item"><b>Gemini の返信案と文章編集を修復</b><span>保存済みの API キーを更新後も読み 返信案と文章の整形を同じ会話だけで作ります</span></li>
+        <li class="feat-item"><b>接続とログインを更新で消さない</b><span>Gmail の認証成功を接続台帳へ戻し 認証 会話 アカウント選択を更新前後で保ちます</span></li>
+        <li class="feat-item"><b>ピン留めと通常一覧を別々に動かせる</b><span>上は6件の高さから始まり 境目をつかんで広げたり元へ戻したりできます</span></li>
+        <li class="feat-item"><b>一覧と会話の中を検索できる</b><span>会話名と本文を一覧から探し 開いた会話の本文だけにも絞れます</span></li>
+        <li class="feat-item"><b>Instagram の複数アカウントを分離</b><span>同じアイコンの中でアカウントを切り替え 認証と新着をアカウントごとに保ちます</span></li>
+        <li class="feat-item"><b>LINE の一覧と画像を取りこぼさない</b><span>会話を一度に取りすぎて更新が止まる不具合を直し 画像と送信取り消し前の文章も残します</span></li>
       </ul>
     </div>
   </section>
@@ -554,7 +554,7 @@
         <li class="feat-item feat-item--pick"><b>iMessage と SMS</b><span>iPhone のやり取りも</span></li>
         <li class="feat-item feat-item--pick"><b>スマホのアプリ</b><span>ブラウザではなくアプリで読む</span></li>
         <li class="feat-item feat-item--pick"><b>返したら次が出る</b><span>返す会話を1件ずつ流していく</span></li>
-        <li class="feat-item feat-item--pick"><b>LINE 以外でも複数アカウント</b><span>Messenger や Instagram も何個でも</span></li>
+        <li class="feat-item feat-item--pick"><b>残りの接続先でも複数アカウント</b><span>Messenger や LinkedIn も何個でも</span></li>
       </ul>
 
       <!-- ウェイトリスト -->
@@ -631,7 +631,7 @@
         <dl class="feat-ai-facts">
           <div><dt>名前</dt><dd>Sendy</dd></div>
           <div><dt>種類</dt><dd>macOS 用のメッセージ統合アプリ</dd></div>
-          <div><dt>版</dt><dd>0.2.77 (ベータ)</dd></div>
+          <div><dt>版</dt><dd>0.2.93 (ベータ)</dd></div>
           <div><dt>開発元</dt><dd>株式会社 Stock Value</dd></div>
         </dl>
 
@@ -639,7 +639,7 @@
         <dl class="feat-ai-facts">
           <div><dt>Sendy の画面で読み書きできる</dt><dd>Messenger / LINE / Instagram / LinkedIn / Chatwork / Gmail / Outlook / iCloud メール</dd></div>
           <div><dt>Sendy の中で元の画面を開く</dt><dd>Slack / Discord</dd></div>
-          <div><dt>同じサービスで複数アカウント</dt><dd>LINE とメールのみ</dd></div>
+          <div><dt>同じサービスで複数アカウント</dt><dd>LINE / Instagram / メール</dd></div>
           <div><dt>相手の既読を表示できる</dt><dd>Messenger / LINE / Instagram のみ</dd></div>
         </dl>
 
@@ -669,14 +669,14 @@
           <div><dt>スマホから開く</dt><dd>同じ Wi-Fi のスマホのブラウザから同じ受信箱を開く (既定は切)</dd></div>
         </dl>
 
-        <h3>この版 (0.2.77) で新しくなったところ</h3>
+        <h3>この版 (0.2.93) で新しくなったところ</h3>
         <dl class="feat-ai-facts">
-          <div><dt>LINE の履歴が読めない時に取り直せる</dt><dd>前の鍵で閉じられた会話に「履歴を取り直す」が出ます 押すと読めるようになった件数が出ます 何も消しません</dd></div>
-          <div><dt>LINE に入り直した時の鍵の受け渡しを記録</dt><dd>スマホから鍵を受け取れたかが分かるようになりました 受け取れた時は過去の履歴も読み直します</dd></div>
-          <div><dt>見ていない Discord や Slack が描くのをやめる</dt><dd>開いていない画面は隠れている間 描画を止めます 通知は今までどおり届きます</dd></div>
-          <div><dt>Chatwork や Slack の未読の印が出る</dt><dd>未読はあるが件数が分からない時に印が消えていた不具合を直しました</dd></div>
-          <div><dt>中身の無いお知らせで通知が鳴らない</dt><dd>LINE の「◯◯さんのお知らせ」だけの知らせは鳴らなくなりました 画面には今までどおり出ます</dd></div>
-          <div><dt>AI の返信案が途中で諦めない</dt><dd>待つ時間が短すぎて 決まり文句に落ちていた不具合を直しました</dd></div>
+          <div><dt>Gemini の返信案と文章編集を修復</dt><dd>保存済みの API キーを更新後も読み 返信案と文章の整形を同じ会話だけで作ります</dd></div>
+          <div><dt>接続とログインを更新で消さない</dt><dd>Gmail の認証成功を接続台帳へ戻し 認証 会話 アカウント選択を更新前後で保ちます</dd></div>
+          <div><dt>ピン留めと通常一覧を別々に動かせる</dt><dd>上は6件の高さから始まり 境目をつかんで広げたり元へ戻したりできます</dd></div>
+          <div><dt>一覧と会話の中を検索できる</dt><dd>会話名と本文を一覧から探し 開いた会話の本文だけにも絞れます</dd></div>
+          <div><dt>Instagram の複数アカウントを分離</dt><dd>同じアイコンの中でアカウントを切り替え 認証と新着をアカウントごとに保ちます</dd></div>
+          <div><dt>LINE の一覧と画像を取りこぼさない</dt><dd>会話を一度に取りすぎて更新が止まる不具合を直し 画像と送信取り消し前の文章も残します</dd></div>
         </dl>
 
         <h3>これから (まだ動かない)</h3>
@@ -689,7 +689,7 @@
           <div><dt>iMessage と SMS</dt><dd>iPhone のやり取りも</dd></div>
           <div><dt>スマホのアプリ</dt><dd>ブラウザではなくアプリで読む</dd></div>
           <div><dt>返したら次が出る</dt><dd>返す会話を1件ずつ流していく</dd></div>
-          <div><dt>LINE 以外でも複数アカウント</dt><dd>Messenger や Instagram も何個でも</dd></div>
+          <div><dt>残りの接続先でも複数アカウント</dt><dd>Messenger や LinkedIn も何個でも</dd></div>
         </dl>
 
         <h3>動く環境と値段</h3>

@@ -6,7 +6,7 @@
 
 **連絡を1か所に。返信は AI と一緒に片づける。**
 
-Messenger・LINE・LinkedIn・Gmail を1つの受信箱にまとめる macOS アプリです。
+Messenger・LINE・Instagram・LinkedIn・Chatwork・メールを1つの受信箱にまとめる macOS アプリです。
 読んでも相手に既読は付きません。返信は、あなたの言い回しを学んだ下書きを承認するだけ。
 
 **[▶ 紹介ページを見る](https://tkimurabusiness-debug.github.io/sendy-download/)** ・
@@ -22,7 +22,7 @@ Messenger・LINE・LinkedIn・Gmail を1つの受信箱にまとめる macOS ア
 
 | | |
 |---|---|
-| **1つの受信箱にまとまる** | Messenger・LINE・LinkedIn・Gmail をひとつの画面で読み書きします。アプリを行き来する必要がなくなります |
+| **1つの受信箱にまとまる** | Messenger・LINE・Instagram・LinkedIn・Chatwork・メールをひとつの画面で読み書きします。アプリを行き来する必要がなくなります |
 | **読んでも既読が付かない** | 開いて読むだけでは相手に既読が伝わりません。返信を送った時にだけ既読が付きます |
 | **あなたの言い回しで下書きが出る** | 過去のやり取りから文体を学び、返信の下書きを用意します。選んで直して送るだけです |
 | **相手のことを覚えている** | 誰と何を話したかを記憶し、返信の材料として差し出します。毎回さかのぼる必要がありません |
@@ -32,13 +32,11 @@ Messenger・LINE・LinkedIn・Gmail を1つの受信箱にまとめる macOS ア
 
 **動作確認が取れているもの**
 
-| Messenger | LINE | LinkedIn | Gmail |
-|:---:|:---:|:---:|:---:|
-| ✅ | ✅ | ✅ | ✅ |
+| Messenger | LINE | Instagram | LinkedIn | Chatwork | Gmail / Outlook / iCloud |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
-**近日実装** — Slack / Discord / Instagram / Chatwork / iCloud メール / Outlook
-
-上の4つ以外はまだ動作確認が取れていません。取れたものから順に開放します。
+Slack と Discord は Sendy の中で各サービスの元の画面を開きます。
 
 ## 動作条件
 
@@ -51,9 +49,7 @@ Messenger・LINE・LinkedIn・Gmail を1つの受信箱にまとめる macOS ア
 2. `.dmg` を開き、Sendy を「アプリケーション」へドラッグする
 3. **初回だけ、Sendy を右クリックして「開く」を選ぶ** → 出てきた確認で「開く」
 
-> 3 の手順が要るのは、まだ Apple の公証 (notarization) を通していないためです。
-> ふつうにダブルクリックすると「開発元を確認できないため開けません」と出ます。
-> 右クリックからの「開く」は1回だけで、2回目からはダブルクリックで開きます。
+> Sendy は Apple の署名と公証を通した配布物です。初回の確認が出た場合は内容を確認して「開く」を選んでください。
 
 ## よくあるつまずき
 

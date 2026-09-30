@@ -81,7 +81,7 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg>
           <span>Sendy をダウンロード</span>
         </a>
-        <div class="dl-meta"><span id="dl-ver">macOS</span> · <span id="dl-size">最新版</span> · .dmg</div>
+        <div class="dl-meta"><span id="dl-ver">macOS</span> · <span id="dl-size">最新版</span> · <span id="dl-kind">.dmg</span></div>
 
         <!-- 機種ちがいの入口。js/download.js が「最新のリリース」から実物の行き先を入れる。
              見つからない機種の行は、js が丸ごと消す (押して 404 にしない)。
@@ -515,16 +515,21 @@
   ============================================================ -->
   <section class="feat" id="whats-new">
     <div class="feat-inner reveal">
-      <h2>0.2.122 で新しくなったところ</h2>
+      <h2>0.2.125 で新しくなったところ</h2>
       <p class="feat-lead">今回の版で直したところと、足したところです。</p>
       <ul class="feat-grid">
+        <li class="feat-item"><b>LINEの暗号化の鍵を正しく保存</b><span>スマホから受け取った鍵を番号ごとに保存し 新しい鍵を確認してからログイン情報を切り替えます</span></li>
+        <li class="feat-item"><b>LINEの入り直しで保存済みデータを守る</b><span>同じアカウントの追加と認証失効の判定を修正し 中断や取得失敗で以前の鍵を消しません</span></li>
+        <li class="feat-item"><b>LinkedInのログイン検出を改善</b><span>画面の読み込み中もログインを確認し 一時的な再接続失敗でCookieを消しません</span></li>
         <li class="feat-item"><b>LINEの新着を会話一覧にも反映</b><span>本文が先に届いた時も 一覧のプレビュー 時刻 未読を更新します</span></li>
         <li class="feat-item"><b>一時的な切断でログイン情報を消さない</b><span>通信障害と認証の失効を分け 更新前にログイン情報と履歴の保存を待ちます</span></li>
         <li class="feat-item"><b>同じ受信の二重通知を抑える</b><span>LINEの投稿のお知らせを通常の新着通知から分け 同じ受信を重ねて通知しません</span></li>
         <li class="feat-item"><b>会話内検索と履歴の読み込みを改善</b><span>検索の重複処理を減らし 履歴の一時的な取得失敗でも取得済みの本文を保持します</span></li>
         <li class="feat-item"><b>リンクとメンションを見分ける</b><span>メールやURL内の@をメンションにせず 自分のリンクは白と下線 相手のリンクは青で表示します</span></li>
         <li class="feat-item"><b>黒いアイコンと画像操作を修正</b><span>黒い標準アイコンを復元し 画像のホイール操作を拡大と縮小に割り当てます</span></li>
+        <li class="feat-item"><b>接続先の書き出し先を修正</b><span>選んだフォルダ内に専用フォルダを作り 既存ファイルを上書きせずに保存します</span></li>
       </ul>
+      <p class="feat-lead">LINEで暗号化された会話を開けなかった方は 更新後にスマホでQRログインをやり直してください。スマホから必要な鍵を受け取るためです。Intel版とWindows版は0.2.106のままです。</p>
     </div>
   </section>
 

@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002F","mailto:info@stockvalue.co.jp","\u002Fblog\u002F[slug]","#for-ai","#for-ai","#services","\u002Fintegrations\u002F[slug]","#features","#services","#download"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()

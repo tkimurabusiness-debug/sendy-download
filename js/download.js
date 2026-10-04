@@ -11,6 +11,7 @@
    M シリーズ用が渡り、開いても起動しなかった。ここで機種を見分けて渡し分ける。 */
 (function () {
   'use strict';
+  function start() {
   var API = 'https://api.github.com/repos/tkimurabusiness-debug/sendy-download/releases/latest';
   var ARM_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-arm64.dmg';
   var INTEL_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-intel.dmg';
@@ -18,6 +19,8 @@
   var LEGACY_API = 'https://api.github.com/repos/tkimurabusiness-debug/sendy-download/releases/tags/v0.2.106';
   var LEGACY_INTEL = INTEL_DMG.replace('/latest/download/', '/download/v0.2.106/');
   var LEGACY_WIN = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/download/v0.2.106/Sendy-Setup-0.2.106.exe';
+  var lastDownload;
+  var lastPicks = {};
 
   /* この機械が何かを見分ける。
      userAgent の "Intel Mac OS X" は M シリーズでもそう名乗るので、Mac の中の機種判別には使えない。
@@ -45,7 +48,8 @@
   }
 
   function setAll(href, size, ver, platform) {
-    var btns = document.querySelectorAll('#download-btn, .footer-dl-btn');
+    lastDownload = [href, size, ver, platform];
+    var btns = document.querySelectorAll('[data-sendy-download="auto"], .c-bMjifB, .footer-dl-btn');
     Array.prototype.forEach.call(btns, function (b) { b.setAttribute('href', href); });
     if (size) {
       var s = document.getElementById('dl-size');
@@ -69,6 +73,7 @@
    * **資産が無ければ丸ごと消す** (押して 404 にしない)。
    * `mine` が真の1つだけ色を付ける — どれを押せばよいかを迷わせない。 */
   function setPick(id, href, asset, mine, version) {
+    lastPicks[id] = [id, href, asset, mine, version];
     var el = document.getElementById(id);
     if (!el) return;
     if (!asset) { el.hidden = true; return; }
@@ -141,8 +146,13 @@
       // 下に出るのは「自分の機械ではない方」だけ。ただし**大きさは主のボタンと同じ**にする
       // (竹蔵「ちっちゃくしないで apple シリコン版とちゃんと同じ感じのボタンに」)。
       setPick('dl-arm', ARM_DMG, pick === arm ? null : arm, false, rel.tag_name);
-      setPick('dl-intel', intel ? intel.browser_download_url : '', pick === intel ? null : intel, false, intelVer);
-      setPick('dl-win', win ? win.browser_download_url : '', pick === win ? null : win, false, winVer);
+      // legacy取得の失敗を「配布物なし」と扱わず、確認済みの初期リンクを保つ。
+      if (releases.legacy || asset(rel, /^Sendy-intel\.dmg$/)) {
+        setPick('dl-intel', intel ? intel.browser_download_url : '', intel, false, intelVer);
+      }
+      if (releases.legacy || asset(rel, /\.exe$/)) {
+        setPick('dl-win', win ? win.browser_download_url : '', pick === win ? null : win, false, winVer);
+      }
       // 並ぶ物が1つも無い時は、見出しも消す (「こちら」と言って何も無いのを防ぐ)。
       var lead = document.querySelector('.dl-picks-lead');
       var shown = document.querySelectorAll('.dl-pick:not([hidden])').length;
@@ -152,4 +162,24 @@
       if (note) note.hidden = !win;
     })
     .catch(function () { /* 初期状態のDMG直リンクを保つ。 */ });
+  // 原版runtimeが追従CTAを後から描画しても、同じ配布先を反映する。
+  new MutationObserver(function (records) {
+    var addedCTA = records.some(function (record) {
+      return Array.prototype.some.call(record.addedNodes, function (node) {
+        return node.nodeType === 1 && (node.matches('[data-sendy-download], .c-bMjifB') || node.querySelector('[data-sendy-download], .c-bMjifB'));
+      });
+    });
+    if (!addedCTA) return;
+    if (lastDownload) setAll.apply(null, lastDownload);
+    Object.keys(lastPicks).forEach(function (key) { setPick.apply(null, lastPicks[key]); });
+  }).observe(document.getElementById('__next') || document.body, { childList: true, subtree: true });
+  }
+  if (window.__NEXT_DATA__) {
+    var ready = setInterval(function () {
+      if (window.next && window.next.router && window.next.router.isReady) {
+        clearInterval(ready);
+        start();
+      }
+    }, 50);
+  } else start();
 })();

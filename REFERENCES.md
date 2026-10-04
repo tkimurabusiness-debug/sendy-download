@@ -1,4 +1,48 @@
-# このページが下敷きにした実在サイト
+# 現在の参照: Arcの描画を保ったSendy版
+
+参照URL: https://arc.net/ / 取得日: 2026-10-01 / 使用手順: `/ui-replica`。
+
+利用者の「一旦完全同じでどんどん変えていく」に従い、原版と一致する状態を作った後、「Sendyばんちゃんと作って」に基づきSendy版へ差し替えた。`index.html` の原版CSS、描画chunkのレイアウト・アニメーション実装、Exposure・Marlinの書体、220pxの紙粒子、波形SVGの形状を保持している。原版の書体定義を維持し、最新の注釈に従い見出し・説明を日本語にする。日本語字形は原版のfallback書体で描画する。
+
+変更はSendyのロゴ・確認済み機能・実画面と動画・3機種の配布先・青紫の背景。原版の口コミと第三者評価は使わず、機能説明と開発元表記へ置き換えた。画像内に他社のUIを残さない。実画面を原版の枠へ収める指定と、Intel版の同寸法ボタンに必要な折り返しだけ加えた。波形の塗りに同じ横方向gradientを重ね、白文字が読めるよう背景色を調整した。原版の書体を別フォントへ置き換えていない。
+
+保存先: `/Users/kimuratakezou/Documents/Sendy-arc-replica-20261001/`。
+
+- `arc-original/`: 原版のHTML・CSS・描画ランタイム・フォント・画像・動画。比較基準として変更しない。
+- `reference/manifest.json`: 元URLから取得した素材と取得結果。
+- `reference-supplement/manifest.json`: 初回取得で不足したMarlin Bold/BoldItalicを公式から取得した応答とhash。元の保存物を上書きせず補完配信する。
+- `baseline-restoration/report.md`: Sendy差し替え前に36幅の寸法・style差分0、主要8幅とスクロール・メニュー13枚のpixel差分0を確認した証拠。
+- `sendy-faithful/manifest.json`: 有効なchunkのStringLiteral置換数、構造置換の一致数、入出力hash、色の役割と波形maskの対応。
+- `sendy-faithful/runtime/`: Sendyに差し替えたchunkと、公開済みSendy画面由来の動画・画像。
+- `sendy-faithful/verify.py`: 画面幅、原版書体、メニュー、スクロール、動画・サービス列、no-JS/reduced-motion、機種別Release取得の成功・失敗の検証。
+- `sendy-faithful/verification.json`: 今回の実行結果。見た目の変更を入れたSendy版を原版とpixel一致したとは扱わない。
+- `rejected-sendy-adaptation/`: 却下された独自Sendy化。以前の技術検査は今回の受入証拠にしない。
+
+作業ページ: `http://127.0.0.1:8879/` と `http://127.0.0.1:8879/sendy-download/`。比較原版: `http://127.0.0.1:8878/`。会話プロセスから独立した専用launchdジョブで配信する。`scripts/preview-reference.py` はrepo外の `serve-original.py` を使い、HTMLは作業repo、変更chunkは `sendy-faithful/runtime/`、他の素材と書体は原版と補完保存物から配信する。計測はローカルstub、外部フォームは無効化し、GitHub Release APIのGETだけ外部通信を許可する。
+
+2026-10-04の「本番のダウンロードページ差し替えちゃっていい」に基づき公開用の静的資産を書き出す。必要な描画chunk・書体・紙背景・波形とSendyの公開画面由来の動画だけを同梱する。原版の計測初期化・scriptと登録サービスの設定値を除外し、別ルートのchunkや取得記録・他LPは公開しない。共有ライブラリ内の未使用SVG・内部名称は表示や通信へ引き継がない。配置先は既存のGitHub Pages `/sendy-download/`。Nextの配置先・静的画像・内部リンクとCSS内のURLを合わせ、CSSのclass名は配置先変更で変えない。技術検証の成功と利用者によるデザイン受入は別に扱う。
+
+2026-10-03の追加依頼: 動画の表示を縮小し、日本語の見出し・短いラベルと右下のAI入口を追加した。原版の機能動画はviewport全幅のcanvasに約80.56%幅のアプリ画面を含む。余白のないSendy素材へ同じ余白をCSSで補い、ヒーローは原版の60%幅に合わせる。原版の書体・紙粒子・SVG波形・レイアウトのCSSは維持する。AIメニューはReactのroot外に配置する。
+
+追加のWeb注釈では、3つの装飾アイコン、主CTAの上にあるOS・ベータ説明とStock Valueロゴを削除し、主CTAと製品画面の間に48px（小画面は32px）の余白を追加する。本文・機能見出しは日本語。続く追加注釈により、上部ナビ・ヒーローCTA・追従帯は英語と原版の書体へ戻し、見出しの引用符装飾4個をSSRと描画chunkの両方で削除する。追従帯のガラス化は最新指示で取り消され、元の紙色・上下の波形を保持する。
+
+- `ai-refinement/media-before.json`: 原版と旧Sendyのcanvas・動画・画像・parentの測定値。
+- `ai-refinement/matrix-refinement.json`: 調整後の15幅、原版のfont styleとの比較、4動画の表示比率、メニューのviewport内配置。
+- `ai-refinement/widget-verification.json`: キーボード、外側クリック、clipboard拒否、provider遷移、reduced-motion、no-JS、解説の表示と26機能の一致。
+- `ai-refinement/grok-prefill.json`: 外部POSTを遮断した匿名ブラウザで、渡した文章が送信前の確認画面に表示された証拠。実送信していない。
+- `ai-refinement/public-guide.json`: 外部AIへ渡す公開済みllms.txtのHTTP 200とhash。ローカルの未公開ai.htmlを外部AIに読ませるURLとして渡さない。
+
+Claude Desktopのprefillは[公式のdeep link仕様](https://support.claude.com/en/articles/14729294-open-claude-desktop-with-a-link)に基づく。ChatGPT・Claude Webは匿名ブラウザの認証・セキュリティ制限により認証後の入力を確認できていない。説明付きリンクに加えて同じ文章をコピーし、入力されない場合の貼り付け手段を表示する。Grokの外部MCP要件は[公式接続仕様](https://docs.x.ai/grok/connectors)に基づき、SendyのローカルMCPが自動的に外部から使えるとは説明しない。
+
+LINE着信・通話画面・音声処理、MCPのlist_members、AI接続先の選択と/コマンドは現行コードを読み取り確認した。公開リリースv0.2.138の説明は版番号だけのため、配布版の実通話受入を推測せず、解説とllms.txtに実装・未検証の状態を記載する。「史上初」の比較は裏付けがないため掲載しない。
+
+
+別LPの比較用原版（2026-10-03）: [Beeper](https://www.beeper.com/)、[Craft](https://www.craft.do/)、[Raycast](https://www.raycast.com/)、[Superhuman](https://superhuman.com/)。`ui-replica`でDOM・CSS・JS・画像・書体を取得し、事業用差分を混ぜる前の独立したローカル基準画面を作る。取得物は `/Users/kimuratakezou/Documents/Sendy-lp-references-20261003/`、一覧は `http://127.0.0.1:8885/`。原版資料と計測設定を公開repoへ持ち込まない。URLのローカル化に際してSVG名前空間を保持し、Next FlightのテキストレコードはURL変更後のUTF-8長を更新する。比較結果と制限は同資料の `verification.json` と `report.md` に記録する。
+
+<details>
+<summary>旧ページの参照記録 (2026-08-03)</summary>
+
+# 旧ページが下敷きにした実在サイト
 
 竹蔵の指示 (2026-08-03)
 
@@ -91,3 +135,7 @@
 | Linear の radius 16px | `var(--radius)` = 18px | **借りない**。Sendy が既に持っている角丸を使う (新しい角丸を作らない掟) |
 | Linear の分類名の色 `#8a8f98` | `var(--fg-faint)` = `rgba(255,255,255,0.40)` | **借りない**。Sendy の既存の薄い文字の色を使う |
 | Raycast の `147.9px + gap 16px 24px` | `.feat--ai .feat-ai-facts dt` = 148px / gap `16px 40px` | 横の間だけ 40px に広げた。2列に折り返した時、24px だと左の列の説明と右の列の名前がくっついて読めなかった |
+
+</details>
+
+2026-10-04の動画サイズ: 1440px幅でヒーロー720→648px、機能動画1160→1044px。公開資産と調整後のローカル版は8幅の配置・書体・配色を比較する。公開前後の表示と操作の証拠は `production-20261004/` に保存し、公開repoには含めない。

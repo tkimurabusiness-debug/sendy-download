@@ -1,19 +1,11 @@
-/* ダウンロードボタンの行き先を、GitHub の「最新のリリース」から毎回引き直す。
-   固定で書いていると版が上がるたびに 404 になる (2026-07-25 に実際に起きた)。
-   同じ id のボタンがページに2つあるので querySelectorAll で全部に入れる
-   (getElementById は1つしか返さず、2つ目が死んだままになる)。
-
-   **v0.2.45 から Intel の Mac 版、v0.2.49 から Windows 版も配っている。** 資産は:
-     Sendy-x.y.z-arm64.dmg … Apple の M シリーズ用
-     Sendy-x.y.z.dmg       … Intel の Mac 用
-     Sendy Setup x.y.z.exe … Windows 用 (試験中)
-   前は「最初に見つかった .dmg」を渡していたので、Intel の Mac の人にも
-   M シリーズ用が渡り、開いても起動しなかった。ここで機種を見分けて渡し分ける。 */
+/* Mシリーズは実機確認済み0.2.186へ固定する。Intel/Windowsは既存stable経路を維持する。 */
 (function () {
   'use strict';
   function start() {
   var API = 'https://api.github.com/repos/tkimurabusiness-debug/sendy-download/releases/latest';
-  var ARM_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-arm64.dmg';
+  var ARM_VERSION = 'v0.2.186';
+  var ARM_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/download/v0.2.186/Sendy-0.2.186-arm64.dmg';
+  var ARM_ASSET = { name: 'Sendy-0.2.186-arm64.dmg', size: 306639117, browser_download_url: ARM_DMG };
   var INTEL_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-intel.dmg';
   // Apple Siliconだけを更新した版では、他の機種は最後に配布した版を使う。
   var LEGACY_API = 'https://api.github.com/repos/tkimurabusiness-debug/sendy-download/releases/tags/v0.2.106';
@@ -88,8 +80,11 @@
   }
 
   setAll(isWindows() ? LEGACY_WIN : isAppleSilicon() === false ? LEGACY_INTEL : ARM_DMG,
-    null, isWindows() || isAppleSilicon() === false ? 'v0.2.106' : null,
+    isWindows() || isAppleSilicon() === false ? null : Math.round(ARM_ASSET.size / 1048576),
+    isWindows() || isAppleSilicon() === false ? 'v0.2.106' : ARM_VERSION,
     isWindows() ? 'Windows 版（試験中）' : isAppleSilicon() === false ? 'macOS 版（Intel）' : 'macOS 版（Apple Silicon）');
+
+  setPick('dl-arm', ARM_DMG, !isWindows() && isAppleSilicon() !== false ? null : ARM_ASSET, false, ARM_VERSION);
 
   function fetchRelease(url) {
     return fetch(url, { headers: { Accept: 'application/vnd.github+json' } })
@@ -110,7 +105,7 @@
     .then(function (releases) {
       if (!releases) return;
       var rel = releases.current;
-      var arm = asset(rel, /^Sendy-arm64\.dmg$/);
+      var arm = ARM_ASSET;
       var intel = asset(rel, /^Sendy-intel\.dmg$/) || asset(releases.legacy, /^Sendy-intel\.dmg$/);
       var win = asset(rel, /\.exe$/) || asset(releases.legacy, /\.exe$/);
       var intelVer = asset(rel, /^Sendy-intel\.dmg$/) ? rel.tag_name : 'v0.2.106';
@@ -120,7 +115,7 @@
       var pick = null;
       var pickHref = '';
       var suffix = '';
-      var version = rel.tag_name;
+      var version = ARM_VERSION;
       var platform = 'macOS 版（Apple Silicon）';
       if (isWindows()) {
         pick = win;
@@ -145,7 +140,7 @@
       // **主のボタンが渡す物は、下に出さない** (同じ物が2つ並ぶと迷う)。
       // 下に出るのは「自分の機械ではない方」だけ。ただし**大きさは主のボタンと同じ**にする
       // (竹蔵「ちっちゃくしないで apple シリコン版とちゃんと同じ感じのボタンに」)。
-      setPick('dl-arm', ARM_DMG, pick === arm ? null : arm, false, rel.tag_name);
+      setPick('dl-arm', ARM_DMG, pick === arm ? null : arm, false, ARM_VERSION);
       // legacy取得の失敗を「配布物なし」と扱わず、確認済みの初期リンクを保つ。
       if (releases.legacy || asset(rel, /^Sendy-intel\.dmg$/)) {
         setPick('dl-intel', intel ? intel.browser_download_url : '', intel, false, intelVer);

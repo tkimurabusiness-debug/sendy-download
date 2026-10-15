@@ -76,7 +76,7 @@ if (hideRe.test(body.slice(aiStart, body.indexOf('</section>', aiStart)))) fail(
 else ok('AI 向けの節を隠していない');
 
 /* ── ⑤ ダウンロードがGitHubのリリース画面を開かないこと ───── */
-const ARM_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/download/v0.2.186/Sendy-0.2.186-arm64.dmg';
+const ARM_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/download/v0.2.188/Sendy-0.2.188-arm64.dmg';
 const INTEL_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-intel.dmg';
 const downloadJs = readFileSync(join(ROOT, 'js', 'download.js'), 'utf8');
 const mainDownload = body.match(/<a\b[^>]*\bid="download-btn"[^>]*\bhref="([^"]+)"/);

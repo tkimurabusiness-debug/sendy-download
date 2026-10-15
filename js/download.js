@@ -1,11 +1,11 @@
-/* Mシリーズは実機確認済み0.2.186へ固定する。Intel/Windowsは既存stable経路を維持する。 */
+/* Mシリーズは実機確認済み0.2.188へ固定する。Intel/Windowsは既存stable経路を維持する。 */
 (function () {
   'use strict';
   function start() {
   var API = 'https://api.github.com/repos/tkimurabusiness-debug/sendy-download/releases/latest';
-  var ARM_VERSION = 'v0.2.186';
-  var ARM_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/download/v0.2.186/Sendy-0.2.186-arm64.dmg';
-  var ARM_ASSET = { name: 'Sendy-0.2.186-arm64.dmg', size: 306639117, browser_download_url: ARM_DMG };
+  var ARM_VERSION = 'v0.2.188';
+  var ARM_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/download/v0.2.188/Sendy-0.2.188-arm64.dmg';
+  var ARM_ASSET = { name: 'Sendy-0.2.188-arm64.dmg', size: 306647015, browser_download_url: ARM_DMG };
   var INTEL_DMG = 'https://github.com/tkimurabusiness-debug/sendy-download/releases/latest/download/Sendy-intel.dmg';
   // Apple Siliconだけを更新した版では、他の機種は最後に配布した版を使う。
   var LEGACY_API = 'https://api.github.com/repos/tkimurabusiness-debug/sendy-download/releases/tags/v0.2.106';

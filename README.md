@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/icon.png" width="112" alt="Sendy" />
+<img src="https://stockvalue.co.jp/products/sendy/assets/icon.png" width="112" alt="Sendy" />
 
 # Sendy
 

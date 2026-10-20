@@ -132,11 +132,11 @@ LINEで暗号化された会話を開けなかった場合は 更新後にスマ
 
 ## リンク
 
-- 人向け全機能ガイド (この作業ではローカル確認用): https://tkimurabusiness-debug.github.io/sendy-download/ai.html
-- AI向け解説: https://tkimurabusiness-debug.github.io/sendy-download/llms.txt
-- 紹介ページ: https://tkimurabusiness-debug.github.io/sendy-download/
+- 人向け全機能ガイド (この作業ではローカル確認用): https://stockvalue.co.jp/products/sendy/ai.html
+- AI向け解説: https://stockvalue.co.jp/products/sendy/llms.txt
+- 紹介ページ: https://stockvalue.co.jp/products/sendy/
 - ダウンロード: https://github.com/tkimurabusiness-debug/sendy-download/releases/latest
-- プライバシーポリシー: https://tkimurabusiness-debug.github.io/sendy-download/privacy.html
-- 利用規約: https://tkimurabusiness-debug.github.io/sendy-download/terms.html
+- プライバシーポリシー: https://stockvalue.co.jp/products/sendy/privacy.html
+- 利用規約: https://stockvalue.co.jp/products/sendy/terms.html
 - 開発元 株式会社 Stock Value: https://stockvalue.co.jp/
 - 連絡先: info@stockvalue.co.jp

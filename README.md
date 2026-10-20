@@ -9,7 +9,7 @@
 Messenger・LINE・Instagram・LinkedIn・Chatwork・メールを1つの受信箱にまとめる macOS アプリです。
 読んでも相手に既読は付きません。返信は、あなたの言い回しを学んだ下書きを承認するだけ。
 
-**[▶ 紹介ページを見る](https://tkimurabusiness-debug.github.io/sendy-download/)** ・
+**[▶ 紹介ページを見る](https://stockvalue.co.jp/products/sendy/)** ・
 **[⬇ ダウンロード (最新版)](https://github.com/tkimurabusiness-debug/sendy-download/releases/latest)**
 
 開発元 [株式会社 Stock Value](https://stockvalue.co.jp/)
@@ -84,7 +84,7 @@ Sendy は起動中に新しい版を見つけると自動で取りに行き、**
 - 各サービスへのログインは、Sendy の中のブラウザでサービスの公式画面に直接行います。Sendy がパスワードを預かることはありません
 - 外部へ送るのは、下書きを作るために必要な範囲の文章だけです
 
-詳しくは[プライバシーポリシー](https://tkimurabusiness-debug.github.io/sendy-download/privacy.html)と[利用規約](https://tkimurabusiness-debug.github.io/sendy-download/terms.html)をご覧ください。
+詳しくは[プライバシーポリシー](https://stockvalue.co.jp/products/sendy/privacy.html)と[利用規約](https://stockvalue.co.jp/products/sendy/terms.html)をご覧ください。
 
 ## このリポジトリについて
 
